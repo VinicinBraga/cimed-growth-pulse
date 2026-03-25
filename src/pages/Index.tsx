@@ -1,16 +1,41 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
+import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
+import { ExecutiveOverview } from "@/components/tabs/ExecutiveOverview";
+import { MarketingPerformance } from "@/components/tabs/MarketingPerformance";
+import { SalesPerformance } from "@/components/tabs/SalesPerformance";
+import { FunnelPerformance } from "@/components/tabs/FunnelPerformance";
+import { SocialMediaIntelligence } from "@/components/tabs/SocialMediaIntelligence";
+import { ProductGrowth } from "@/components/tabs/ProductGrowth";
+import { GrowthEfficiency } from "@/components/tabs/GrowthEfficiency";
+import { GrowthDrivers } from "@/components/tabs/GrowthDrivers";
 
-// IMPORTANT: Fully REPLACE this with your own code
-const PlaceholderIndex = () => {
-  // PLACEHOLDER: Replace this entire return statement with the user's app.
-  // The inline background color is intentionally not part of the design system.
+const tabs: Record<string, React.ComponentType> = {
+  overview: ExecutiveOverview,
+  marketing: MarketingPerformance,
+  sales: SalesPerformance,
+  funnel: FunnelPerformance,
+  social: SocialMediaIntelligence,
+  product: ProductGrowth,
+  efficiency: GrowthEfficiency,
+  drivers: GrowthDrivers,
+};
+
+const Index = () => {
+  const [activeTab, setActiveTab] = useState("overview");
+  const ActiveComponent = tabs[activeTab] || ExecutiveOverview;
+
   return (
-    <div className="flex min-h-screen items-center justify-center" style={{ backgroundColor: '#fcfbf8' }}>
-      <img data-lovable-blank-page-placeholder="REMOVE_THIS" src="/placeholder.svg" alt="Your app will live here!" />
+    <div className="flex min-h-screen w-full bg-muted/30">
+      <DashboardSidebar activeTab={activeTab} onTabChange={setActiveTab} />
+      <div className="flex-1 flex flex-col min-w-0">
+        <DashboardHeader />
+        <main className="flex-1 p-6 overflow-auto">
+          <ActiveComponent />
+        </main>
+      </div>
     </div>
   );
 };
-
-const Index = PlaceholderIndex;
 
 export default Index;
