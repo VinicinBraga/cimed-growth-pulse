@@ -1,114 +1,350 @@
 import { KPICard } from "../dashboard/KPICard";
 import { ChartCard } from "../dashboard/ChartCard";
-import { Trophy, TrendingUp, MapPin, Package, Target, AlertTriangle, Calendar, Star } from "lucide-react";
-import { channelRevenue, categoryRevenue, regionRevenue, topProducts, brandRevenue } from "@/data/mockData";
 import {
-  BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
-  ScatterChart, Scatter, ZAxis
+  Zap,
+  TrendingUp,
+  Target,
+  Users,
+  BarChart3,
+  Lightbulb,
+  Rocket,
+  Percent,
+} from "lucide-react";
+
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
 } from "recharts";
 
-const channelMatrix = channelRevenue.map(c => ({
-  name: c.channel,
-  revenue: c.revenue,
-  roas: c.roas,
-  spend: c.spend * 100,
-  color: c.color,
-}));
+const COLORS = {
+  primary: "#F6C338",
+  black: "#111111",
+  darkGray: "#4B5563",
+  gray: "#6B7280",
+  lightGray: "#9CA3AF",
+  lighterGray: "#D1D5DB",
+  grid: "#E5E7EB",
+};
 
-export function GrowthDrivers() {
-  return (
+const DRIVER_COLORS = [
+  "#F6C338",
+  "#111111",
+  "#6B7280",
+  "#9CA3AF",
+  "#4B5563",
+  "#D1D5DB",
+];
+
+const growthDrivers = [
+  { driver: "Paid Media", impact: 28 },
+  { driver: "CRM", impact: 19 },
+  { driver: "Organic", impact: 24 },
+  { driver: "Product", impact: 15 },
+  { driver: "Pricing", impact: 9 },
+  { driver: "Partnerships", impact: 12 },
+];
+
+const experiments = [
+  { month: "Jan", tests: 6, wins: 3 },
+  { month: "Feb", tests: 7, wins: 4 },
+  { month: "Mar", tests: 9, wins: 5 },
+  { month: "Apr", tests: 8, wins: 5 },
+  { month: "May", tests: 10, wins: 6 },
+  { month: "Jun", tests: 11, wins: 7 },
+];
+
+const growthContribution = [
+  { month: "Jan", revenue: 6.2 },
+  { month: "Feb", revenue: 6.9 },
+  { month: "Mar", revenue: 7.5 },
+  { month: "Apr", revenue: 8.1 },
+  { month: "May", revenue: 9.3 },
+  { month: "Jun", revenue: 10.4 },
+];
+
+function percent(value:number){
+
+  return `${value}%`
+
+}
+
+export function GrowthDrivers(){
+
+  return(
+
     <div className="space-y-6">
-      <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-4">
-        <KPICard label="Top Channel" value="Google Ads" icon={Trophy} />
-        <KPICard label="Top Category" value="OTC Medicines" icon={TrendingUp} />
-        <KPICard label="Top Region" value="Southeast" icon={MapPin} />
-        <KPICard label="Top Product" value="Benegrip" icon={Package} />
-        <KPICard label="Best ROAS" value="Organic" icon={Target} />
-        <KPICard label="Worst CPA" value="YouTube" icon={AlertTriangle} />
-        <KPICard label="Top Month" value="December" icon={Calendar} />
-        <KPICard label="Top Brand" value="Benegrip" icon={Star} />
+
+       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <KPICard label="Growth Drivers" value="12" change={2.1} icon={Zap}/>
+        <KPICard label="Experiments" value="51" change={6.3} icon={Lightbulb}/>
+        <KPICard label="Win Rate" value="58%" change={3.2} icon={Percent}/>
+        <KPICard label="Revenue Impact" value="R$ 10.4M" change={8.1} icon={TrendingUp}/>
+        <KPICard label="New Users" value="84K" change={5.4} icon={Users}/>
+        <KPICard label="Conversion Lift" value="4.2%" change={1.1} icon={Target}/>
+        <KPICard label="Initiatives" value="23" change={2.8} icon={Rocket}/>
+        <KPICard label="Impact Score" value="82" change={1.7} icon={BarChart3}/>
+
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <ChartCard title="Revenue by Channel (R$ M)">
-          <ResponsiveContainer width="100%" height={280}>
-            <BarChart data={channelRevenue} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis type="number" tick={{ fontSize: 11 }} />
-              <YAxis dataKey="channel" type="category" tick={{ fontSize: 10 }} width={80} />
-              <Tooltip />
-              <Bar dataKey="revenue" radius={[0, 4, 4, 0]}>
-                {channelRevenue.map((e, i) => <Cell key={i} fill={e.color} />)}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
 
-        <ChartCard title="Revenue by Category (R$ M)">
-          <ResponsiveContainer width="100%" height={280}>
-            <BarChart data={categoryRevenue}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="category" tick={{ fontSize: 9 }} />
-              <YAxis tick={{ fontSize: 11 }} />
-              <Tooltip />
-              <Bar dataKey="revenue" fill="#FFC72C" radius={[4, 4, 0, 0]} name="Revenue" />
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-
-        <ChartCard title="Revenue by Region (R$ M)">
-          <ResponsiveContainer width="100%" height={280}>
-            <BarChart data={regionRevenue}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="region" tick={{ fontSize: 10 }} />
-              <YAxis tick={{ fontSize: 11 }} />
-              <Tooltip />
-              <Bar dataKey="revenue" fill="#111111" radius={[4, 4, 0, 0]} name="Revenue" />
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-      </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <ChartCard title="Top Growth Products">
-          <ResponsiveContainer width="100%" height={280}>
-            <BarChart data={topProducts.filter(p => p.growth > 0).sort((a, b) => b.growth - a.growth).slice(0, 6)} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis type="number" tick={{ fontSize: 11 }} unit="%" />
-              <YAxis dataKey="name" type="category" tick={{ fontSize: 10 }} width={120} />
-              <Tooltip formatter={(v: number) => `${v}%`} />
-              <Bar dataKey="growth" fill="#22C55E" radius={[0, 4, 4, 0]} name="Growth" />
+
+        <ChartCard title="Growth Impact by Driver (%)">
+
+          <ResponsiveContainer width="100%" height={300}>
+
+            <BarChart data={growthDrivers}>
+
+              <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid}/>
+
+              <XAxis
+              dataKey="driver"
+              tick={{fontSize:10,fill:COLORS.gray}}
+              axisLine={false}
+              tickLine={false}
+              />
+
+              <YAxis
+              tick={{fontSize:11,fill:COLORS.gray}}
+              axisLine={false}
+              tickLine={false}
+              />
+
+              <Tooltip
+              formatter={(value:number)=>[percent(value),"Impact"]}
+              contentStyle={{
+                borderRadius:12,
+                border:"1px solid #E5E7EB",
+                boxShadow:"0 8px 24px rgba(0,0,0,0.08)"
+              }}
+              />
+
+              <Bar dataKey="impact" radius={[8,8,0,0]}>
+
+                {growthDrivers.map((entry,index)=>(
+
+                  <Cell key={entry.driver} fill={DRIVER_COLORS[index % DRIVER_COLORS.length]}/>
+
+                ))}
+
+              </Bar>
+
             </BarChart>
+
           </ResponsiveContainer>
+
         </ChartCard>
 
-        <ChartCard title="Top Growth Brands (R$ M)">
-          <ResponsiveContainer width="100%" height={280}>
-            <BarChart data={brandRevenue}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="brand" tick={{ fontSize: 10 }} />
-              <YAxis tick={{ fontSize: 11 }} />
-              <Tooltip />
-              <Bar dataKey="revenue" fill="#FFC72C" radius={[4, 4, 0, 0]} name="Revenue" />
-            </BarChart>
+
+
+        <ChartCard title="Experiments vs Wins">
+
+          <ResponsiveContainer width="100%" height={300}>
+
+            <LineChart data={experiments}>
+
+              <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid}/>
+
+              <XAxis
+              dataKey="month"
+              tick={{fontSize:11,fill:COLORS.gray}}
+              axisLine={false}
+              tickLine={false}
+              />
+
+              <YAxis
+              tick={{fontSize:11,fill:COLORS.gray}}
+              axisLine={false}
+              tickLine={false}
+              />
+
+              <Tooltip
+              contentStyle={{
+                borderRadius:12,
+                border:"1px solid #E5E7EB",
+                boxShadow:"0 8px 24px rgba(0,0,0,0.08)"
+              }}
+              />
+
+              <Line
+              type="monotone"
+              dataKey="tests"
+              stroke={COLORS.primary}
+              strokeWidth={2.5}
+              dot={{fill:COLORS.primary,r:4}}
+              />
+
+              <Line
+              type="monotone"
+              dataKey="wins"
+              stroke={COLORS.black}
+              strokeWidth={2.5}
+              dot={{fill:COLORS.black,r:4}}
+              />
+
+            </LineChart>
+
           </ResponsiveContainer>
+
         </ChartCard>
+
       </div>
 
-      <ChartCard title="Channel Opportunity Matrix">
-        <ResponsiveContainer width="100%" height={300}>
-          <ScatterChart>
-            <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-            <XAxis type="number" dataKey="spend" name="Spend" tick={{ fontSize: 11 }} label={{ value: "Spend Index", position: "bottom", fontSize: 11 }} />
-            <YAxis type="number" dataKey="roas" name="ROAS" tick={{ fontSize: 11 }} label={{ value: "ROAS", angle: -90, position: "insideLeft", fontSize: 11 }} />
-            <ZAxis type="number" dataKey="revenue" range={[100, 600]} name="Revenue" />
-            <Tooltip cursor={{ strokeDasharray: "3 3" }} formatter={(v: number, name: string) => name === "Revenue" ? `R$ ${v}M` : v} />
-            <Scatter data={channelMatrix} name="Channels">
-              {channelMatrix.map((c, i) => <Cell key={i} fill={c.color} />)}
-            </Scatter>
-          </ScatterChart>
-        </ResponsiveContainer>
-      </ChartCard>
+
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+
+        <ChartCard title="Revenue Driven by Initiatives">
+
+          <ResponsiveContainer width="100%" height={260}>
+
+            <AreaChart data={growthContribution}>
+
+              <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid}/>
+
+              <XAxis
+              dataKey="month"
+              tick={{fontSize:11,fill:COLORS.gray}}
+              axisLine={false}
+              tickLine={false}
+              />
+
+              <YAxis
+              tick={{fontSize:11,fill:COLORS.gray}}
+              axisLine={false}
+              tickLine={false}
+              />
+
+              <Tooltip
+              formatter={(value:number)=>[`R$ ${value}M`,"Revenue"]}
+              contentStyle={{
+                borderRadius:12,
+                border:"1px solid #E5E7EB",
+                boxShadow:"0 8px 24px rgba(0,0,0,0.08)"
+              }}
+              />
+
+              <Area
+              type="monotone"
+              dataKey="revenue"
+              stroke={COLORS.primary}
+              fill={COLORS.primary}
+              fillOpacity={0.18}
+              strokeWidth={2.5}
+              />
+
+            </AreaChart>
+
+          </ResponsiveContainer>
+
+        </ChartCard>
+
+
+
+        <ChartCard title="Top Initiatives">
+
+          <div className="overflow-x-auto">
+
+            <table className="w-full text-sm">
+
+              <thead>
+
+                <tr className="border-b border-border">
+
+                  <th className="text-left py-3 px-4 text-xs uppercase text-muted-foreground">
+                    Initiative
+                  </th>
+
+                  <th className="text-right py-3 px-4 text-xs uppercase text-muted-foreground">
+                    Impact
+                  </th>
+
+                  <th className="text-right py-3 px-4 text-xs uppercase text-muted-foreground">
+                    Status
+                  </th>
+
+                </tr>
+
+              </thead>
+
+              <tbody>
+
+                {[
+                  {name:"Pricing Optimization",impact:"High"},
+                  {name:"CRM Automation",impact:"High"},
+                  {name:"New Landing Pages",impact:"Medium"},
+                  {name:"SEO Expansion",impact:"Medium"},
+                  {name:"Partner Campaigns",impact:"Low"},
+                ].map((row,index)=>(
+
+                  <tr
+                  key={row.name}
+                  className="border-b border-border/50 hover:bg-muted/30"
+                  >
+
+                    <td className="py-3 px-4 font-medium">
+
+                      <div className="flex items-center gap-3">
+
+                        <span
+                        className="h-2.5 w-2.5 rounded-full"
+                        style={{backgroundColor:DRIVER_COLORS[index % DRIVER_COLORS.length]}}
+                        />
+
+                        {row.name}
+
+                      </div>
+
+                    </td>
+
+                    <td className="py-3 px-4 text-right text-muted-foreground">
+                      {row.impact}
+                    </td>
+
+                    <td className="py-3 px-4 text-right">
+
+                      <span
+                      className="px-2 py-1 text-xs rounded-full border"
+                      style={{
+                        background:"#FEF3C7",
+                        borderColor:"#F6C338",
+                        color:"#111111"
+                      }}
+                      >
+
+                        Active
+
+                      </span>
+
+                    </td>
+
+                  </tr>
+
+                ))}
+
+              </tbody>
+
+            </table>
+
+          </div>
+
+        </ChartCard>
+
+      </div>
+
     </div>
-  );
+
+  )
+
 }

@@ -25,10 +25,14 @@ export function KPICard({ label, value, change, icon: Icon }: KPICardProps) {
       </div>
       <div className="kpi-value">{value}</div>
       {change !== undefined && (
-        <div className={`flex items-center gap-1 mt-2 text-xs font-medium ${isPositive ? "kpi-change-positive" : "kpi-change-negative"}`}>
-          {isPositive ? <TrendingUp size={12} /> : <TrendingDown size={12} />}
-          <span>{isPositive ? "+" : ""}{change.toFixed(1)}% vs last month</span>
-        </div>
+        <div className="flex items-center gap-1 mt-2 text-xs font-medium text-muted-foreground">
+        {isPositive ? (
+          <TrendingUp size={12} className="text-primary" />
+        ) : (
+          <TrendingDown size={12} className="text-destructive" />
+        )}
+        <span>{isPositive ? "+" : ""}{change.toFixed(1)}% vs last month</span>
+      </div>
       )}
     </div>
   );

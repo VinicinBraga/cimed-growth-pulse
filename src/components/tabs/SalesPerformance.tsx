@@ -1,16 +1,110 @@
 import { KPICard } from "../dashboard/KPICard";
 import { ChartCard } from "../dashboard/ChartCard";
-import { DollarSign, Package, ShoppingCart, CreditCard, Percent, RotateCcw, TrendingDown, BarChart3 } from "lucide-react";
-import { monthlyTrend, channelRevenue, categoryRevenue, topProducts, regionRevenue, brandRevenue } from "@/data/mockData";
 import {
-  LineChart, Line, BarChart, Bar, Cell,
-  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend, AreaChart, Area
+  DollarSign,
+  Package,
+  ShoppingCart,
+  CreditCard,
+  Percent,
+  RotateCcw,
+  BarChart3,
+} from "lucide-react";
+import {
+  monthlyTrend,
+  channelRevenue,
+  categoryRevenue,
+  topProducts,
+  brandRevenue,
+} from "@/data/mockData";
+import {
+  BarChart,
+  Bar,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  AreaChart,
+  Area,
 } from "recharts";
 
+const COLORS = {
+  primary: "#F6C338",
+  primarySoft: "#FDE68A",
+  black: "#111111",
+  darkGray: "#4B5563",
+  gray: "#6B7280",
+  lightGray: "#9CA3AF",
+  lighterGray: "#D1D5DB",
+  grid: "#E5E7EB",
+};
+
+const CHANNEL_COLORS = [
+  "#F6C338",
+  "#111111",
+  "#6B7280",
+  "#9CA3AF",
+  "#D1D5DB",
+  "#4B5563",
+];
+
+const CATEGORY_COLORS = [
+  "#F6C338",
+  "#111111",
+  "#6B7280",
+  "#9CA3AF",
+  "#D1D5DB",
+  "#4B5563",
+];
+
+function formatCompactNumber(value: number) {
+  const num = Number(value || 0);
+
+  if (num >= 1000000) {
+    return `${(num / 1000000).toFixed(1).replace(".", ",")}M`;
+  }
+
+  if (num >= 1000) {
+    return `${(num / 1000).toFixed(1).replace(".", ",")}K`;
+  }
+
+  return `${num}`;
+}
+
+function formatCurrencyCompact(value: number) {
+  const num = Number(value || 0);
+
+  if (num >= 1000000) {
+    return `R$ ${(num / 1000000).toFixed(1).replace(".", ",")}M`;
+  }
+
+  if (num >= 1000) {
+    return `R$ ${(num / 1000).toFixed(1).replace(".", ",")}K`;
+  }
+
+  return `R$ ${num.toFixed(0).replace(".", ",")}`;
+}
+
 export function SalesPerformance() {
+  const styledChannelRevenue = channelRevenue.map((item, index) => ({
+    ...item,
+    color: CHANNEL_COLORS[index % CHANNEL_COLORS.length],
+  }));
+
+  const styledCategoryRevenue = categoryRevenue.map((item, index) => ({
+    ...item,
+    color: CATEGORY_COLORS[index % CATEGORY_COLORS.length],
+  }));
+
+  const styledBrandRevenue = brandRevenue.map((item, index) => ({
+    ...item,
+    color: CHANNEL_COLORS[index % CHANNEL_COLORS.length],
+  }));
+
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-4">
+       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <KPICard label="Net Revenue" value="R$ 56.2M" change={4.5} icon={DollarSign} />
         <KPICard label="Gross Revenue" value="R$ 62.8M" change={4.1} icon={DollarSign} />
         <KPICard label="Units Sold" value="59.4K" change={4.4} icon={Package} />
@@ -25,11 +119,36 @@ export function SalesPerformance() {
         <ChartCard title="Revenue Trend (R$ M)">
           <ResponsiveContainer width="100%" height={280}>
             <AreaChart data={monthlyTrend}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="month" tick={{ fontSize: 11 }} />
-              <YAxis tick={{ fontSize: 11 }} />
-              <Tooltip />
-              <Area type="monotone" dataKey="revenue" stroke="#FFC72C" fill="#FFC72C" fillOpacity={0.15} strokeWidth={2} name="Revenue" />
+              <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
+              <XAxis
+                dataKey="month"
+                tick={{ fontSize: 11, fill: COLORS.gray }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis
+                tick={{ fontSize: 11, fill: COLORS.gray }}
+                axisLine={false}
+                tickLine={false}
+                tickFormatter={(v) => formatCompactNumber(Number(v))}
+              />
+              <Tooltip
+                formatter={(value: number) => [formatCurrencyCompact(Number(value)), "Revenue"]}
+                contentStyle={{
+                  borderRadius: 12,
+                  border: "1px solid #E5E7EB",
+                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+                }}
+              />
+              <Area
+                type="monotone"
+                dataKey="revenue"
+                stroke={COLORS.primary}
+                fill={COLORS.primary}
+                fillOpacity={0.18}
+                strokeWidth={2.5}
+                name="Revenue"
+              />
             </AreaChart>
           </ResponsiveContainer>
         </ChartCard>
@@ -37,11 +156,36 @@ export function SalesPerformance() {
         <ChartCard title="Units Sold Trend">
           <ResponsiveContainer width="100%" height={280}>
             <AreaChart data={monthlyTrend}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="month" tick={{ fontSize: 11 }} />
-              <YAxis tick={{ fontSize: 11 }} tickFormatter={v => `${(v/1000).toFixed(0)}K`} />
-              <Tooltip />
-              <Area type="monotone" dataKey="units" stroke="#111111" fill="#111111" fillOpacity={0.05} strokeWidth={2} name="Units" />
+              <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
+              <XAxis
+                dataKey="month"
+                tick={{ fontSize: 11, fill: COLORS.gray }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis
+                tick={{ fontSize: 11, fill: COLORS.gray }}
+                axisLine={false}
+                tickLine={false}
+                tickFormatter={(v) => formatCompactNumber(Number(v))}
+              />
+              <Tooltip
+                formatter={(value: number) => [formatCompactNumber(Number(value)), "Units"]}
+                contentStyle={{
+                  borderRadius: 12,
+                  border: "1px solid #E5E7EB",
+                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+                }}
+              />
+              <Area
+                type="monotone"
+                dataKey="units"
+                stroke={COLORS.black}
+                fill={COLORS.black}
+                fillOpacity={0.06}
+                strokeWidth={2.5}
+                name="Units"
+              />
             </AreaChart>
           </ResponsiveContainer>
         </ChartCard>
@@ -50,13 +194,34 @@ export function SalesPerformance() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         <ChartCard title="Revenue by Channel (R$ M)">
           <ResponsiveContainer width="100%" height={240}>
-            <BarChart data={channelRevenue} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis type="number" tick={{ fontSize: 11 }} />
-              <YAxis dataKey="channel" type="category" tick={{ fontSize: 10 }} width={80} />
-              <Tooltip />
-              <Bar dataKey="revenue" radius={[0, 4, 4, 0]}>
-                {channelRevenue.map((e, i) => <Cell key={i} fill={e.color} />)}
+            <BarChart data={styledChannelRevenue} layout="vertical">
+              <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
+              <XAxis
+                type="number"
+                tick={{ fontSize: 11, fill: COLORS.gray }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis
+                dataKey="channel"
+                type="category"
+                tick={{ fontSize: 10, fill: COLORS.gray }}
+                axisLine={false}
+                tickLine={false}
+                width={88}
+              />
+              <Tooltip
+                formatter={(value: number) => [formatCurrencyCompact(Number(value) * 1000000), "Revenue"]}
+                contentStyle={{
+                  borderRadius: 12,
+                  border: "1px solid #E5E7EB",
+                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+                }}
+              />
+              <Bar dataKey="revenue" radius={[0, 8, 8, 0]}>
+                {styledChannelRevenue.map((entry, i) => (
+                  <Cell key={i} fill={entry.color} />
+                ))}
               </Bar>
             </BarChart>
           </ResponsiveContainer>
@@ -64,24 +229,67 @@ export function SalesPerformance() {
 
         <ChartCard title="Revenue by Category (R$ M)">
           <ResponsiveContainer width="100%" height={240}>
-            <BarChart data={categoryRevenue}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="category" tick={{ fontSize: 9 }} />
-              <YAxis tick={{ fontSize: 11 }} />
-              <Tooltip />
-              <Bar dataKey="revenue" fill="#FFC72C" radius={[4, 4, 0, 0]} name="Revenue" />
+            <BarChart data={styledCategoryRevenue}>
+              <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
+              <XAxis
+                dataKey="category"
+                tick={{ fontSize: 9, fill: COLORS.gray }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis
+                tick={{ fontSize: 11, fill: COLORS.gray }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <Tooltip
+                formatter={(value: number) => [formatCurrencyCompact(Number(value) * 1000000), "Revenue"]}
+                contentStyle={{
+                  borderRadius: 12,
+                  border: "1px solid #E5E7EB",
+                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+                }}
+              />
+              <Bar dataKey="revenue" radius={[8, 8, 0, 0]} name="Revenue">
+                {styledCategoryRevenue.map((entry, i) => (
+                  <Cell key={i} fill={entry.color} />
+                ))}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </ChartCard>
 
         <ChartCard title="Revenue by Brand (R$ M)">
           <ResponsiveContainer width="100%" height={240}>
-            <BarChart data={brandRevenue} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis type="number" tick={{ fontSize: 11 }} />
-              <YAxis dataKey="brand" type="category" tick={{ fontSize: 10 }} width={80} />
-              <Tooltip />
-              <Bar dataKey="revenue" fill="#111111" radius={[0, 4, 4, 0]} name="Revenue" />
+            <BarChart data={styledBrandRevenue} layout="vertical">
+              <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
+              <XAxis
+                type="number"
+                tick={{ fontSize: 11, fill: COLORS.gray }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis
+                dataKey="brand"
+                type="category"
+                tick={{ fontSize: 10, fill: COLORS.gray }}
+                axisLine={false}
+                tickLine={false}
+                width={88}
+              />
+              <Tooltip
+                formatter={(value: number) => [formatCurrencyCompact(Number(value) * 1000000), "Revenue"]}
+                contentStyle={{
+                  borderRadius: 12,
+                  border: "1px solid #E5E7EB",
+                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+                }}
+              />
+              <Bar dataKey="revenue" radius={[0, 8, 8, 0]} name="Revenue">
+                {styledBrandRevenue.map((entry, i) => (
+                  <Cell key={i} fill={entry.color} />
+                ))}
+              </Bar>
             </BarChart>
           </ResponsiveContainer>
         </ChartCard>
@@ -92,20 +300,47 @@ export function SalesPerformance() {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border">
-                <th className="text-left py-3 px-4 font-semibold text-muted-foreground text-xs uppercase">Product</th>
-                <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase">Revenue</th>
-                <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase">Units</th>
-                <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase">Growth</th>
+                <th className="text-left py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
+                  Product
+                </th>
+                <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
+                  Revenue
+                </th>
+                <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
+                  Units
+                </th>
+                <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
+                  Growth
+                </th>
               </tr>
             </thead>
             <tbody>
-              {topProducts.map((p) => (
-                <tr key={p.name} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
-                  <td className="py-3 px-4 font-medium text-foreground">{p.name}</td>
-                  <td className="py-3 px-4 text-right text-foreground">R$ {p.revenue}M</td>
-                  <td className="py-3 px-4 text-right text-muted-foreground">{p.units.toLocaleString()}</td>
-                  <td className={`py-3 px-4 text-right font-semibold ${p.growth >= 0 ? "text-success" : "text-destructive"}`}>
-                    {p.growth >= 0 ? "+" : ""}{p.growth}%
+              {topProducts.map((p, index) => (
+                <tr
+                  key={p.name}
+                  className="border-b border-border/50 hover:bg-muted/30 transition-colors"
+                >
+                  <td className="py-3 px-4 font-medium text-foreground">
+                    <div className="flex items-center gap-3">
+                      <span
+                        className="h-2.5 w-2.5 rounded-full"
+                        style={{ backgroundColor: CHANNEL_COLORS[index % CHANNEL_COLORS.length] }}
+                      />
+                      {p.name}
+                    </div>
+                  </td>
+                  <td className="py-3 px-4 text-right text-foreground font-medium">
+                    R$ {p.revenue}M
+                  </td>
+                  <td className="py-3 px-4 text-right text-muted-foreground">
+                    {p.units.toLocaleString()}
+                  </td>
+                  <td
+                    className="py-3 px-4 text-right font-semibold"
+                    style={{ color: p.growth >= 0 ? COLORS.black : COLORS.gray }}
+                  >
+                    {p.growth >= 0 ? "+" : ""}
+                    {p.growth}%
                   </td>
                 </tr>
               ))}

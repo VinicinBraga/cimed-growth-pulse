@@ -1,126 +1,349 @@
 import { KPICard } from "../dashboard/KPICard";
 import { ChartCard } from "../dashboard/ChartCard";
-import { DollarSign, Heart, Target, TrendingUp, ShoppingCart, Percent, Users, UserCheck } from "lucide-react";
-import { monthlyTrend, efficiencyByChannel } from "@/data/mockData";
 import {
-  LineChart, Line, BarChart, Bar, Cell,
-  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Legend
+  TrendingUp,
+  DollarSign,
+  Target,
+  Percent,
+  BarChart3,
+  Gauge,
+  Zap,
+  LineChart as LineIcon,
+} from "lucide-react";
+
+import {
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  Cell,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
 } from "recharts";
 
-const CHANNEL_COLORS = ["#FFC72C", "#1877F2", "#000000", "#FF0000", "#22C55E"];
+const COLORS = {
+  primary: "#F6C338",
+  black: "#111111",
+  darkGray: "#4B5563",
+  gray: "#6B7280",
+  lightGray: "#9CA3AF",
+  lighterGray: "#D1D5DB",
+  grid: "#E5E7EB",
+};
 
-export function GrowthEfficiency() {
-  return (
+const EFFICIENCY_COLORS = [
+  "#F6C338",
+  "#111111",
+  "#6B7280",
+  "#9CA3AF",
+  "#4B5563",
+];
+
+const efficiencyChannels = [
+  { channel: "Google Ads", cac: 42, roas: 5.4, ltv: 320 },
+  { channel: "Meta Ads", cac: 38, roas: 5.8, ltv: 295 },
+  { channel: "Organic", cac: 12, roas: 9.2, ltv: 410 },
+  { channel: "CRM", cac: 18, roas: 7.1, ltv: 360 },
+  { channel: "Partners", cac: 27, roas: 6.2, ltv: 305 },
+];
+
+const efficiencyTrend = [
+  { month: "Jan", roas: 4.8, cac: 46, ltv: 280 },
+  { month: "Feb", roas: 5.1, cac: 44, ltv: 290 },
+  { month: "Mar", roas: 5.3, cac: 43, ltv: 300 },
+  { month: "Apr", roas: 5.6, cac: 41, ltv: 315 },
+  { month: "May", roas: 5.9, cac: 39, ltv: 330 },
+  { month: "Jun", roas: 6.2, cac: 37, ltv: 345 },
+];
+
+const paybackData = [
+  { segment: "Enterprise", months: 6 },
+  { segment: "SMB", months: 8 },
+  { segment: "Mid Market", months: 7 },
+  { segment: "Online", months: 5 },
+];
+
+function money(value:number){
+
+  return `R$ ${value}`
+
+}
+
+export function GrowthEfficiency(){
+
+  return(
+
     <div className="space-y-6">
-      <div className="grid grid-cols-2 md:grid-cols-4 xl:grid-cols-8 gap-4">
-        <KPICard label="CAC" value="R$ 28" change={-3.4} icon={DollarSign} />
-        <KPICard label="LTV" value="R$ 210" change={1.9} icon={Heart} />
-        <KPICard label="LTV/CAC" value="7.5x" change={5.6} icon={Target} />
-        <KPICard label="ROAS" value="5.0x" change={0.0} icon={TrendingUp} />
-        <KPICard label="Rev/Order" value="R$ 745" change={1.2} icon={ShoppingCart} />
-        <KPICard label="Cost/Order" value="R$ 149" change={-2.8} icon={DollarSign} />
-        <KPICard label="Cust. Conv." value="0.071%" change={3.3} icon={Users} />
-        <KPICard label="Lead Conv." value="7.55%" change={4.5} icon={UserCheck} />
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4"> 
+        <KPICard label="ROAS" value="6.2x" change={0.6} icon={TrendingUp}/>
+        <KPICard label="CAC" value="R$ 37" change={-4.1} icon={DollarSign}/>
+        <KPICard label="LTV" value="R$ 345" change={5.4} icon={Target}/>
+        <KPICard label="LTV/CAC" value="9.3" change={0.8} icon={Gauge}/>
+        <KPICard label="Payback" value="6.5m" change={-0.4} icon={Zap}/>
+        <KPICard label="Margin" value="26%" change={1.2} icon={Percent}/>
+        <KPICard label="Efficiency" value="82%" change={2.1} icon={BarChart3}/>
+        <KPICard label="Growth ROI" value="5.9x" change={0.5} icon={LineIcon}/>
+
       </div>
+
+
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <ChartCard title="CAC Trend (R$)">
-          <ResponsiveContainer width="100%" height={280}>
-            <LineChart data={monthlyTrend}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="month" tick={{ fontSize: 11 }} />
-              <YAxis tick={{ fontSize: 11 }} />
-              <Tooltip />
-              <Line type="monotone" dataKey="cac" stroke="#EF4444" strokeWidth={2.5} dot={{ fill: "#EF4444", r: 3 }} name="CAC" />
-            </LineChart>
-          </ResponsiveContainer>
-        </ChartCard>
-
-        <ChartCard title="LTV vs CAC (R$)">
-          <ResponsiveContainer width="100%" height={280}>
-            <LineChart data={monthlyTrend}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="month" tick={{ fontSize: 11 }} />
-              <YAxis tick={{ fontSize: 11 }} />
-              <Tooltip />
-              <Line type="monotone" dataKey="ltv" stroke="#3B82F6" strokeWidth={2.5} dot={{ fill: "#3B82F6", r: 3 }} name="LTV" />
-              <Line type="monotone" dataKey="cac" stroke="#EF4444" strokeWidth={2.5} dot={{ fill: "#EF4444", r: 3 }} name="CAC" />
-              <Legend />
-            </LineChart>
-          </ResponsiveContainer>
-        </ChartCard>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <ChartCard title="LTV Trend (R$)">
-          <ResponsiveContainer width="100%" height={240}>
-            <LineChart data={monthlyTrend}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="month" tick={{ fontSize: 11 }} />
-              <YAxis tick={{ fontSize: 11 }} domain={[170, 220]} />
-              <Tooltip />
-              <Line type="monotone" dataKey="ltv" stroke="#3B82F6" strokeWidth={2.5} dot={{ fill: "#3B82F6", r: 3 }} name="LTV" />
-            </LineChart>
-          </ResponsiveContainer>
-        </ChartCard>
 
         <ChartCard title="ROAS Trend">
-          <ResponsiveContainer width="100%" height={240}>
-            <LineChart data={monthlyTrend}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="month" tick={{ fontSize: 11 }} />
-              <YAxis tick={{ fontSize: 11 }} domain={[4, 6]} />
-              <Tooltip />
-              <Line type="monotone" dataKey="roas" stroke="#22C55E" strokeWidth={2.5} dot={{ fill: "#22C55E", r: 3 }} name="ROAS" />
-            </LineChart>
+
+          <ResponsiveContainer width="100%" height={300}>
+
+            <AreaChart data={efficiencyTrend}>
+
+              <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid}/>
+
+              <XAxis
+              dataKey="month"
+              tick={{fontSize:11,fill:COLORS.gray}}
+              axisLine={false}
+              tickLine={false}
+              />
+
+              <YAxis
+              tick={{fontSize:11,fill:COLORS.gray}}
+              axisLine={false}
+              tickLine={false}
+              />
+
+              <Tooltip
+              formatter={(value:number)=>[`${value}x`,"ROAS"]}
+              contentStyle={{
+                borderRadius:12,
+                border:"1px solid #E5E7EB",
+                boxShadow:"0 8px 24px rgba(0,0,0,0.08)"
+              }}
+              />
+
+              <Area
+              type="monotone"
+              dataKey="roas"
+              stroke={COLORS.primary}
+              fill={COLORS.primary}
+              fillOpacity={0.18}
+              strokeWidth={2.5}
+              />
+
+            </AreaChart>
+
           </ResponsiveContainer>
+
         </ChartCard>
 
-        <ChartCard title="Cost per Order by Channel (R$)">
-          <ResponsiveContainer width="100%" height={240}>
-            <BarChart data={efficiencyByChannel}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-              <XAxis dataKey="channel" tick={{ fontSize: 9 }} />
-              <YAxis tick={{ fontSize: 11 }} />
-              <Tooltip />
-              <Bar dataKey="costPerOrder" fill="#EF4444" radius={[4, 4, 0, 0]} name="Cost/Order">
-                {efficiencyByChannel.map((_, i) => <Cell key={i} fill={CHANNEL_COLORS[i]} />)}
-              </Bar>
-            </BarChart>
+
+
+        <ChartCard title="CAC Trend">
+
+          <ResponsiveContainer width="100%" height={300}>
+
+            <LineChart data={efficiencyTrend}>
+
+              <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid}/>
+
+              <XAxis
+              dataKey="month"
+              tick={{fontSize:11,fill:COLORS.gray}}
+              axisLine={false}
+              tickLine={false}
+              />
+
+              <YAxis
+              tick={{fontSize:11,fill:COLORS.gray}}
+              axisLine={false}
+              tickLine={false}
+              />
+
+              <Tooltip
+              formatter={(value:number)=>[money(value),"CAC"]}
+              contentStyle={{
+                borderRadius:12,
+                border:"1px solid #E5E7EB",
+                boxShadow:"0 8px 24px rgba(0,0,0,0.08)"
+              }}
+              />
+
+              <Line
+              type="monotone"
+              dataKey="cac"
+              stroke={COLORS.black}
+              strokeWidth={2.5}
+              dot={{fill:COLORS.black,r:4}}
+              activeDot={{r:6}}
+              />
+
+            </LineChart>
+
           </ResponsiveContainer>
+
         </ChartCard>
+
       </div>
 
-      <ChartCard title="Efficiency by Channel">
-        <div className="overflow-x-auto">
-          <table className="w-full text-sm">
-            <thead>
-              <tr className="border-b border-border">
-                <th className="text-left py-3 px-4 font-semibold text-muted-foreground text-xs uppercase">Channel</th>
-                <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase">CAC</th>
-                <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase">LTV</th>
-                <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase">LTV/CAC</th>
-                <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase">ROAS</th>
-                <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase">Rev/Order</th>
-                <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase">Cost/Order</th>
-              </tr>
-            </thead>
-            <tbody>
-              {efficiencyByChannel.map((c) => (
-                <tr key={c.channel} className="border-b border-border/50 hover:bg-muted/30 transition-colors">
-                  <td className="py-3 px-4 font-medium text-foreground">{c.channel}</td>
-                  <td className="py-3 px-4 text-right text-foreground">R$ {c.cac}</td>
-                  <td className="py-3 px-4 text-right text-foreground">R$ {c.ltv}</td>
-                  <td className="py-3 px-4 text-right font-semibold text-success">{c.ltvCac}x</td>
-                  <td className="py-3 px-4 text-right font-semibold text-foreground">{c.roas}x</td>
-                  <td className="py-3 px-4 text-right text-muted-foreground">R$ {c.revenuePerOrder}</td>
-                  <td className="py-3 px-4 text-right text-muted-foreground">R$ {c.costPerOrder}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </ChartCard>
+
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+
+        <ChartCard title="LTV by Channel">
+
+          <ResponsiveContainer width="100%" height={240}>
+
+            <BarChart data={efficiencyChannels}>
+
+              <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid}/>
+
+              <XAxis
+              dataKey="channel"
+              tick={{fontSize:10,fill:COLORS.gray}}
+              axisLine={false}
+              tickLine={false}
+              />
+
+              <YAxis
+              tick={{fontSize:11,fill:COLORS.gray}}
+              axisLine={false}
+              tickLine={false}
+              />
+
+              <Tooltip
+              formatter={(value:number)=>[money(value),"LTV"]}
+              contentStyle={{
+                borderRadius:12,
+                border:"1px solid #E5E7EB",
+                boxShadow:"0 8px 24px rgba(0,0,0,0.08)"
+              }}
+              />
+
+              <Bar dataKey="ltv" radius={[8,8,0,0]}>
+
+                {efficiencyChannels.map((entry,index)=>(
+
+                  <Cell key={entry.channel} fill={EFFICIENCY_COLORS[index % EFFICIENCY_COLORS.length]}/>
+
+                ))}
+
+              </Bar>
+
+            </BarChart>
+
+          </ResponsiveContainer>
+
+        </ChartCard>
+
+
+
+        <ChartCard title="ROAS by Channel">
+
+          <ResponsiveContainer width="100%" height={240}>
+
+            <BarChart data={efficiencyChannels}>
+
+              <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid}/>
+
+              <XAxis
+              dataKey="channel"
+              tick={{fontSize:10,fill:COLORS.gray}}
+              axisLine={false}
+              tickLine={false}
+              />
+
+              <YAxis
+              tick={{fontSize:11,fill:COLORS.gray}}
+              axisLine={false}
+              tickLine={false}
+              />
+
+              <Tooltip
+              formatter={(value:number)=>[`${value}x`,"ROAS"]}
+              contentStyle={{
+                borderRadius:12,
+                border:"1px solid #E5E7EB",
+                boxShadow:"0 8px 24px rgba(0,0,0,0.08)"
+              }}
+              />
+
+              <Bar dataKey="roas" radius={[8,8,0,0]}>
+
+                {efficiencyChannels.map((entry,index)=>(
+
+                  <Cell key={entry.channel} fill={EFFICIENCY_COLORS[index % EFFICIENCY_COLORS.length]}/>
+
+                ))}
+
+              </Bar>
+
+            </BarChart>
+
+          </ResponsiveContainer>
+
+        </ChartCard>
+
+
+
+        <ChartCard title="Payback (months)">
+
+          <ResponsiveContainer width="100%" height={240}>
+
+            <BarChart data={paybackData} layout="vertical">
+
+              <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid}/>
+
+              <XAxis
+              type="number"
+              tick={{fontSize:11,fill:COLORS.gray}}
+              axisLine={false}
+              tickLine={false}
+              />
+
+              <YAxis
+              dataKey="segment"
+              type="category"
+              tick={{fontSize:11,fill:COLORS.gray}}
+              axisLine={false}
+              tickLine={false}
+              width={90}
+              />
+
+              <Tooltip
+              formatter={(value:number)=>[`${value} months`,"Payback"]}
+              contentStyle={{
+                borderRadius:12,
+                border:"1px solid #E5E7EB",
+                boxShadow:"0 8px 24px rgba(0,0,0,0.08)"
+              }}
+              />
+
+              <Bar dataKey="months" radius={[0,8,8,0]}>
+
+                {paybackData.map((entry,index)=>(
+
+                  <Cell key={entry.segment} fill={EFFICIENCY_COLORS[index % EFFICIENCY_COLORS.length]}/>
+
+                ))}
+
+              </Bar>
+
+            </BarChart>
+
+          </ResponsiveContainer>
+
+        </ChartCard>
+
+      </div>
+
+
     </div>
-  );
+
+  )
+
 }
