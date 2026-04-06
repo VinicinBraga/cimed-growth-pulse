@@ -1,37 +1,36 @@
 import { KPICard } from "../dashboard/KPICard";
 import { ChartCard } from "../dashboard/ChartCard";
 import {
+  MessageCircle,
+  Heart,
+  Share2,
   Users,
-  MousePointerClick,
-  UserPlus,
-  ShoppingCart,
-  Percent,
   TrendingUp,
-  Filter,
+  Eye,
   BarChart3,
+  ThumbsUp,
 } from "lucide-react";
-import { monthlyTrend } from "@/data/mockData";
+import { socialData, monthlyTrend } from "@/data/mockData";
 import {
   ResponsiveContainer,
-  FunnelChart,
-  Funnel as RechartsFunnel,
-  Tooltip,
-  LabelList,
-  BarChart,
-  Bar,
-  Cell,
-  XAxis,
-  YAxis,
-  CartesianGrid,
   LineChart,
   Line,
   AreaChart,
   Area,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  Cell,
+  PieChart,
+  Pie,
+  Legend,
 } from "recharts";
 
 const COLORS = {
   primary: "#F6C338",
-  primarySoft: "#FDE68A",
   black: "#111111",
   darkGray: "#4B5563",
   gray: "#6B7280",
@@ -40,7 +39,8 @@ const COLORS = {
   grid: "#E5E7EB",
 };
 
-const FUNNEL_COLORS = ["#F6C338", "#111111", "#4B5563", "#6B7280", "#9CA3AF"];
+const PLATFORM_COLORS = ["#F6C338", "#111111", "#6B7280", "#9CA3AF", "#D1D5DB"];
+const SENTIMENT_COLORS = ["#111111", "#F6C338", "#9CA3AF"];
 
 function formatCompactNumber(value: number) {
   const num = Number(value || 0);
@@ -56,153 +56,59 @@ function formatCompactNumber(value: number) {
   return `${num}`;
 }
 
-export function FunnelPerformance() {
-  const funnelData = [
-    { name: "Visitantes", value: 42000000, fill: FUNNEL_COLORS[0] },
-    { name: "Cliques", value: 1260000, fill: FUNNEL_COLORS[1] },
-    { name: "Leads", value: 185000, fill: FUNNEL_COLORS[2] },
-    { name: "Qualificados", value: 24800, fill: FUNNEL_COLORS[3] },
-    { name: "Clientes", value: 1740, fill: FUNNEL_COLORS[4] },
-  ];
-
-  const conversionByStage = [
-    { stage: "Visita → Clique", rate: 3.0 },
-    { stage: "Clique → Lead", rate: 14.7 },
-    { stage: "Lead → Qualificado", rate: 13.4 },
-    { stage: "Qualificado → Cliente", rate: 7.0 },
-  ];
-
-  const dropoffData = [
-    { stage: "Visitantes", lost: 40740000 },
-    { stage: "Cliques", lost: 1075000 },
-    { stage: "Leads", lost: 160200 },
-    { stage: "Qualificados", lost: 23060 },
-  ];
-
-  const funnelTrend = monthlyTrend.map((item, index) => ({
+export function SocialMediaIntelligence() {
+  const engagementTrend = monthlyTrend.map((item, index) => ({
     month: item.month,
-    visitToLead: 0.38 + index * 0.01 + (index % 2 === 0 ? 0.01 : 0.02),
-    leadToCustomer: 0.82 + index * 0.015 + (index % 2 === 0 ? 0.01 : 0.025),
+    engagement: 3.8 + index * 0.12 + (index % 2 === 0 ? 0.08 : 0.16),
+    reach: 1800000 + index * 85000,
+    mentions: 24000 + index * 1200,
   }));
 
-  const stageVolumeTrend = monthlyTrend.map((item, index) => ({
+  const platformPerformance = [
+    { platform: "Instagram", followers: 3200000, engagement: 4.8, mentions: 18500 },
+    { platform: "TikTok", followers: 2100000, engagement: 5.6, mentions: 14200 },
+    { platform: "YouTube", followers: 1250000, engagement: 3.4, mentions: 9800 },
+    { platform: "Facebook", followers: 980000, engagement: 2.9, mentions: 7200 },
+    { platform: "X", followers: 640000, engagement: 2.1, mentions: 4300 },
+  ];
+
+  const sentimentData = [
+    { name: "Positivo", value: 62 },
+    { name: "Neutro", value: 27 },
+    { name: "Negativo", value: 11 },
+  ];
+
+  const contentPerformance = [
+    { type: "Vídeo Curto", engagement: 5.9, reach: 2400000 },
+    { type: "Imagem", engagement: 3.8, reach: 1600000 },
+    { type: "Carrossel", engagement: 4.6, reach: 1900000 },
+    { type: "Stories", engagement: 3.1, reach: 1300000 },
+    { type: "UGC", engagement: 5.2, reach: 1750000 },
+  ];
+
+  const mentionsTrend = monthlyTrend.map((item, index) => ({
     month: item.month,
-    visitors: 3200000 + index * 110000,
-    leads: 13000 + index * 650,
-    customers: 110 + index * 8,
+    organic: 12000 + index * 700,
+    paid: 8000 + index * 550,
   }));
 
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <KPICard label="Visitantes" value="42M" change={8.2} icon={Users} />
-        <KPICard label="Cliques" value="1.26M" change={5.1} icon={MousePointerClick} />
-        <KPICard label="Leads" value="185K" change={6.8} icon={UserPlus} />
-        <KPICard label="Clientes" value="1,740" change={5.5} icon={ShoppingCart} />
-        <KPICard label="Visita → Clique" value="3.0%" change={0.2} icon={Percent} />
-        <KPICard label="Clique → Lead" value="14.7%" change={0.8} icon={TrendingUp} />
-        <KPICard label="Lead → Cliente" value="0.9%" change={0.1} icon={Filter} />
-        <KPICard label="CVR Geral" value="0.004%" change={0.0} icon={BarChart3} />
+        <KPICard label="Seguidores" value="8,2M" change={6.4} icon={Users} />
+        <KPICard label="Alcance" value="22,4M" change={8.1} icon={Eye} />
+        <KPICard label="Engajamento" value="4,7%" change={0.5} icon={Heart} />
+        <KPICard label="Menções" value="54K" change={7.2} icon={MessageCircle} />
+        <KPICard label="Compartilhamentos" value="182K" change={5.9} icon={Share2} />
+        <KPICard label="Interações" value="1,34M" change={6.8} icon={ThumbsUp} />
+        <KPICard label="Crescimento" value="+12,6%" change={1.1} icon={TrendingUp} />
+        <KPICard label="Share of Voice" value="28,4%" change={0.9} icon={BarChart3} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <ChartCard title="Funil Completo">
-          <ResponsiveContainer width="100%" height={320}>
-            <FunnelChart>
-              <Tooltip
-                formatter={(value: number) => [formatCompactNumber(Number(value)), "Volume"]}
-                contentStyle={{
-                  borderRadius: 12,
-                  border: "1px solid #E5E7EB",
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-                }}
-              />
-              <RechartsFunnel dataKey="value" data={funnelData} isAnimationActive>
-                <LabelList
-                  position="right"
-                  fill={COLORS.gray}
-                  stroke="none"
-                  dataKey="name"
-                  style={{ fontSize: 12, fontWeight: 500 }}
-                />
-              </RechartsFunnel>
-            </FunnelChart>
-          </ResponsiveContainer>
-        </ChartCard>
-
-        <ChartCard title="Taxa de Conversão por Etapa (%)">
-          <ResponsiveContainer width="100%" height={320}>
-            <BarChart data={conversionByStage}>
-              <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
-              <XAxis
-                dataKey="stage"
-                tick={{ fontSize: 11, fill: COLORS.gray }}
-                axisLine={false}
-                tickLine={false}
-              />
-              <YAxis
-                tick={{ fontSize: 11, fill: COLORS.gray }}
-                axisLine={false}
-                tickLine={false}
-              />
-              <Tooltip
-                formatter={(value: number) => [`${value.toFixed(1).replace(".", ",")}%`, "Taxa"]}
-                contentStyle={{
-                  borderRadius: 12,
-                  border: "1px solid #E5E7EB",
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-                }}
-              />
-              <Bar dataKey="rate" radius={[8, 8, 0, 0]}>
-                {conversionByStage.map((entry, index) => (
-                  <Cell key={entry.stage} fill={FUNNEL_COLORS[index % FUNNEL_COLORS.length]} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <ChartCard title="Perda por Etapa">
-          <ResponsiveContainer width="100%" height={240}>
-            <BarChart data={dropoffData} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
-              <XAxis
-                type="number"
-                tick={{ fontSize: 11, fill: COLORS.gray }}
-                axisLine={false}
-                tickLine={false}
-                tickFormatter={(v) => formatCompactNumber(Number(v))}
-              />
-              <YAxis
-                dataKey="stage"
-                type="category"
-                tick={{ fontSize: 11, fill: COLORS.gray }}
-                axisLine={false}
-                tickLine={false}
-                width={80}
-              />
-              <Tooltip
-                formatter={(value: number) => [formatCompactNumber(Number(value)), "Perdidos"]}
-                contentStyle={{
-                  borderRadius: 12,
-                  border: "1px solid #E5E7EB",
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-                }}
-              />
-              <Bar dataKey="lost" radius={[0, 8, 8, 0]}>
-                {dropoffData.map((entry, index) => (
-                  <Cell key={entry.stage} fill={FUNNEL_COLORS[index % FUNNEL_COLORS.length]} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-
-        <ChartCard title="Tendência de Conversão">
-          <ResponsiveContainer width="100%" height={240}>
-            <LineChart data={funnelTrend}>
+        <ChartCard title="Tendência de Engajamento (%)">
+          <ResponsiveContainer width="100%" height={280}>
+            <LineChart data={engagementTrend}>
               <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
               <XAxis
                 dataKey="month"
@@ -216,10 +122,7 @@ export function FunnelPerformance() {
                 tickLine={false}
               />
               <Tooltip
-                formatter={(value: number, name: string) => [
-                  `${Number(value).toFixed(2).replace(".", ",")}%`,
-                  name === "visitToLead" ? "Visita → Lead" : "Lead → Cliente",
-                ]}
+                formatter={(value: number) => [`${value.toFixed(2).replace(".", ",")}%`, "Engajamento"]}
                 contentStyle={{
                   borderRadius: 12,
                   border: "1px solid #E5E7EB",
@@ -228,29 +131,125 @@ export function FunnelPerformance() {
               />
               <Line
                 type="monotone"
-                dataKey="visitToLead"
+                dataKey="engagement"
                 stroke={COLORS.primary}
                 strokeWidth={2.5}
                 dot={{ fill: COLORS.primary, r: 3.5 }}
                 activeDot={{ r: 5 }}
-                name="Visita → Lead"
-              />
-              <Line
-                type="monotone"
-                dataKey="leadToCustomer"
-                stroke={COLORS.black}
-                strokeWidth={2.5}
-                dot={{ fill: COLORS.black, r: 3.5 }}
-                activeDot={{ r: 5 }}
-                name="Lead → Cliente"
+                name="Engajamento"
               />
             </LineChart>
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="Tendência de Volume por Etapa">
+        <ChartCard title="Tendência de Alcance">
+          <ResponsiveContainer width="100%" height={280}>
+            <AreaChart data={engagementTrend}>
+              <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
+              <XAxis
+                dataKey="month"
+                tick={{ fontSize: 11, fill: COLORS.gray }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis
+                tick={{ fontSize: 11, fill: COLORS.gray }}
+                axisLine={false}
+                tickLine={false}
+                tickFormatter={(v) => formatCompactNumber(Number(v))}
+              />
+              <Tooltip
+                formatter={(value: number) => [formatCompactNumber(Number(value)), "Alcance"]}
+                contentStyle={{
+                  borderRadius: 12,
+                  border: "1px solid #E5E7EB",
+                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+                }}
+              />
+              <Area
+                type="monotone"
+                dataKey="reach"
+                stroke={COLORS.black}
+                fill={COLORS.black}
+                fillOpacity={0.08}
+                strokeWidth={2.5}
+                name="Alcance"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
+        </ChartCard>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <ChartCard title="Performance por Plataforma">
           <ResponsiveContainer width="100%" height={240}>
-            <AreaChart data={stageVolumeTrend}>
+            <BarChart data={platformPerformance}>
+              <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
+              <XAxis
+                dataKey="platform"
+                tick={{ fontSize: 10, fill: COLORS.gray }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis
+                tick={{ fontSize: 11, fill: COLORS.gray }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <Tooltip
+                formatter={(value: number, name: string) => [
+                  name === "followers"
+                    ? formatCompactNumber(Number(value))
+                    : `${Number(value).toFixed(1).replace(".", ",")}%`,
+                  name === "followers" ? "Seguidores" : "Engajamento",
+                ]}
+                contentStyle={{
+                  borderRadius: 12,
+                  border: "1px solid #E5E7EB",
+                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+                }}
+              />
+              <Bar dataKey="engagement" radius={[8, 8, 0, 0]} name="Engajamento">
+                {platformPerformance.map((entry, index) => (
+                  <Cell key={entry.platform} fill={PLATFORM_COLORS[index % PLATFORM_COLORS.length]} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </ChartCard>
+
+        <ChartCard title="Sentimento das Menções">
+          <ResponsiveContainer width="100%" height={240}>
+            <PieChart>
+              <Pie
+                data={sentimentData}
+                dataKey="value"
+                nameKey="name"
+                cx="50%"
+                cy="50%"
+                outerRadius={78}
+                label={({ name, value }) => `${name}: ${value}%`}
+              >
+                {sentimentData.map((entry, index) => (
+                  <Cell key={entry.name} fill={SENTIMENT_COLORS[index % SENTIMENT_COLORS.length]} />
+                ))}
+              </Pie>
+              <Tooltip
+                formatter={(value: number) => [`${value}%`, "Participação"]}
+                contentStyle={{
+                  borderRadius: 12,
+                  border: "1px solid #E5E7EB",
+                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+                }}
+              />
+              <Legend />
+            </PieChart>
+          </ResponsiveContainer>
+        </ChartCard>
+
+        <ChartCard title="Menções ao Longo do Tempo">
+          <ResponsiveContainer width="100%" height={240}>
+            <AreaChart data={mentionsTrend}>
               <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
               <XAxis
                 dataKey="month"
@@ -267,7 +266,7 @@ export function FunnelPerformance() {
               <Tooltip
                 formatter={(value: number, name: string) => [
                   formatCompactNumber(Number(value)),
-                  name === "visitors" ? "Visitantes" : name === "leads" ? "Leads" : "Clientes",
+                  name === "organic" ? "Orgânicas" : "Pagas",
                 ]}
                 contentStyle={{
                   borderRadius: 12,
@@ -277,79 +276,74 @@ export function FunnelPerformance() {
               />
               <Area
                 type="monotone"
-                dataKey="visitors"
-                stroke={COLORS.lightGray}
-                fill={COLORS.lightGray}
-                fillOpacity={0.18}
-                strokeWidth={2}
-                name="Visitantes"
-              />
-              <Area
-                type="monotone"
-                dataKey="leads"
+                dataKey="organic"
                 stroke={COLORS.primary}
                 fill={COLORS.primary}
                 fillOpacity={0.18}
                 strokeWidth={2}
-                name="Leads"
+                name="Orgânicas"
               />
               <Area
                 type="monotone"
-                dataKey="customers"
+                dataKey="paid"
                 stroke={COLORS.black}
                 fill={COLORS.black}
                 fillOpacity={0.08}
                 strokeWidth={2}
-                name="Clientes"
+                name="Pagas"
               />
             </AreaChart>
           </ResponsiveContainer>
         </ChartCard>
       </div>
 
-      <ChartCard title="Resumo das Etapas do Funil">
+      <ChartCard title="Performance por Tipo de Conteúdo">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border">
                 <th className="text-left py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
-                  Etapa
+                  Tipo de Conteúdo
                 </th>
                 <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
-                  Volume
+                  Engajamento
                 </th>
                 <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
-                  Participação
+                  Alcance
                 </th>
                 <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
-                  CVR Etapa Ant.
+                  Prioridade
                 </th>
               </tr>
             </thead>
             <tbody>
-              {[
-                { stage: "Visitantes", volume: "42,0M", share: "100%", cvr: "-" },
-                { stage: "Cliques", volume: "1,26M", share: "3,0%", cvr: "3,0%" },
-                { stage: "Leads", volume: "185K", share: "0,44%", cvr: "14,7%" },
-                { stage: "Qualificados", volume: "24,8K", share: "0,06%", cvr: "13,4%" },
-                { stage: "Clientes", volume: "1.740", share: "0,004%", cvr: "7,0%" },
-              ].map((row, index) => (
+              {contentPerformance.map((row, index) => (
                 <tr
-                  key={row.stage}
+                  key={row.type}
                   className="border-b border-border/50 hover:bg-muted/30 transition-colors"
                 >
                   <td className="py-3 px-4 font-medium text-foreground">
                     <div className="flex items-center gap-3">
                       <span
                         className="h-2.5 w-2.5 rounded-full"
-                        style={{ backgroundColor: FUNNEL_COLORS[index % FUNNEL_COLORS.length] }}
+                        style={{ backgroundColor: PLATFORM_COLORS[index % PLATFORM_COLORS.length] }}
                       />
-                      {row.stage}
+                      {row.type}
                     </div>
                   </td>
-                  <td className="py-3 px-4 text-right text-foreground font-medium">{row.volume}</td>
-                  <td className="py-3 px-4 text-right text-muted-foreground">{row.share}</td>
-                  <td className="py-3 px-4 text-right text-muted-foreground">{row.cvr}</td>
+                  <td className="py-3 px-4 text-right text-foreground font-medium">
+                    {row.engagement.toFixed(1).replace(".", ",")}%
+                  </td>
+                  <td className="py-3 px-4 text-right text-muted-foreground">
+                    {formatCompactNumber(row.reach)}
+                  </td>
+                  <td className="py-3 px-4 text-right text-muted-foreground">
+                    {row.engagement >= 5
+                      ? "Alta"
+                      : row.engagement >= 4
+                      ? "Média"
+                      : "Baixa"}
+                  </td>
                 </tr>
               ))}
             </tbody>
