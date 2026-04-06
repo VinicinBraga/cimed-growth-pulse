@@ -12,12 +12,6 @@ export function DashboardHeader() {
       <div className="flex items-center gap-2">
         <span className="text-xs text-muted-foreground mr-2">Last updated: Mar 25, 2026</span>
         <button className="p-2 rounded-lg hover:bg-muted transition-colors text-muted-foreground">
-          <Bell size={16} />
-        </button>
-        <button className="p-2 rounded-lg hover:bg-muted transition-colors text-muted-foreground">
-          <Settings size={16} />
-        </button>
-        <button className="p-2 rounded-lg hover:bg-muted transition-colors text-muted-foreground">
           <User size={16} />
         </button>
       </div>
