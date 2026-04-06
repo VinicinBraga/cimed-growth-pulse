@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Loader2 } from "lucide-react";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { ExecutiveOverview } from "@/components/tabs/ExecutiveOverview";
@@ -24,6 +25,7 @@ const tabs: Record<string, React.ComponentType> = {
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("overview");
+  const [isPageLoading, setIsPageLoading] = useState(true);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,10 +33,33 @@ const Index = () => {
 
     if (!isAuth) {
       navigate("/login");
+      return;
     }
+
+    const timer = setTimeout(() => {
+      setIsPageLoading(false);
+    }, 2500);
+
+    return () => clearTimeout(timer);
   }, [navigate]);
 
   const ActiveComponent = tabs[activeTab] || ExecutiveOverview;
+
+  if (isPageLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center">
+          <div className="flex justify-center mb-4">
+            <Loader2 className="h-10 w-10 animate-spin" />
+          </div>
+          <h1 className="text-2xl font-bold tracking-tight">CIMED</h1>
+          <p className="text-sm text-muted-foreground mt-2">
+            Carregando indicadores...
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen w-full bg-muted/30">

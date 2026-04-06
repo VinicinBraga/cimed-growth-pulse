@@ -17,7 +17,7 @@ const Login = () => {
     localStorage.setItem("fakeAuth", "true");
     localStorage.setItem("fakeUserEmail", email || "usuario@cimed.com.br");
 
-    navigate("/");
+    navigate("/loading");;
   };
 
   return (
