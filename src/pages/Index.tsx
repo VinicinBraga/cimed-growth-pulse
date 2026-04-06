@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 import { DashboardHeader } from "@/components/dashboard/DashboardHeader";
 import { ExecutiveOverview } from "@/components/tabs/ExecutiveOverview";
@@ -23,6 +24,16 @@ const tabs: Record<string, React.ComponentType> = {
 
 const Index = () => {
   const [activeTab, setActiveTab] = useState("overview");
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const isAuth = localStorage.getItem("fakeAuth");
+
+    if (!isAuth) {
+      navigate("/login");
+    }
+  }, [navigate]);
+
   const ActiveComponent = tabs[activeTab] || ExecutiveOverview;
 
   return (
