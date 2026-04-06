@@ -126,36 +126,6 @@ function formatDecimal(value: number, digits = 1) {
   return Number(value || 0).toFixed(digits).replace(".", ",");
 }
 
-function getRoasChartDomain(data: Array<{ value: number }>) {
-  if (!data.length) return [0, 6];
-
-  const values = data.map((item) => Number(item.value || 0));
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-
-  if (min === max) {
-    return [Math.max(0, min - 1), max + 1];
-  }
-
-  const padding = Math.max(0.2, (max - min) * 0.25);
-  return [Math.max(0, min - padding), max + padding];
-}
-
-function getCacChartDomain(data: Array<{ value: number }>) {
-  if (!data.length) return [0, 300];
-
-  const values = data.map((item) => Number(item.value || 0));
-  const min = Math.min(...values);
-  const max = Math.max(...values);
-
-  if (min === max) {
-    return [Math.max(0, min - 20), max + 20];
-  }
-
-  const padding = Math.max(5, (max - min) * 0.25);
-  return [Math.max(0, min - padding), max + padding];
-}
-
 export function ExecutiveOverview() {
   const [data, setData] = useState<OverviewResponse | null>(null);
   const [loading, setLoading] = useState(true);
@@ -167,8 +137,8 @@ export function ExecutiveOverview() {
         const response = (await dashboardApi.getOverview()) as OverviewResponse;
         setData(response);
       } catch (err) {
-        console.error("Erro ao carregar overview:", err);
-        setError("Erro ao carregar overview");
+        console.error("Erro ao carregar visão geral:", err);
+        setError("Erro ao carregar visão geral");
       } finally {
         setLoading(false);
       }
@@ -178,299 +148,50 @@ export function ExecutiveOverview() {
   }, []);
 
   if (loading) {
-    return <div className="p-6">Carregando overview...</div>;
+    return <div className="p-6">Carregando visão geral...</div>;
   }
 
   if (error || !data) {
     return <div className="p-6 text-red-500">{error || "Sem dados para exibir."}</div>;
   }
 
-  const roasTrendData =
-    data.roasTrend && data.roasTrend.length > 0
-      ? data.roasTrend
-      : data.monthlyTrend.map((item) => ({
-          month: item.month,
-          value: Number(item.roas || 0),
-        }));
-
-  const cacTrendData =
-    data.cacTrend && data.cacTrend.length > 0
-      ? data.cacTrend
-      : data.monthlyTrend.map((item) => ({
-          month: item.month,
-          value: Number(item.cac || 0),
-        }));
-
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <KPICard label="Net Revenue" value={data.kpis.netRevenue} change={4.5} icon={DollarSign} />
-        <KPICard label="Mkt Spend" value={data.kpis.mktSpend} change={3.7} icon={TrendingUp} />
+        <KPICard label="Receita Líquida" value={data.kpis.netRevenue} change={4.5} icon={DollarSign} />
+        <KPICard label="Investimento em Mídia" value={data.kpis.mktSpend} change={3.7} icon={TrendingUp} />
         <KPICard label="ROAS" value={data.kpis.roas} change={0.0} icon={Target} />
         <KPICard label="CAC" value={data.kpis.cac} change={-3.4} icon={BarChart3} />
-        <KPICard label="Customers" value={data.kpis.customers} change={5.5} icon={Users} />
-        <KPICard label="Units Sold" value={data.kpis.unitsSold} change={4.4} icon={Package} />
-        <KPICard label="Avg LTV" value={data.kpis.avgLtv} change={1.9} icon={Heart} />
+        <KPICard label="Clientes" value={data.kpis.customers} change={5.5} icon={Users} />
+        <KPICard label="Unidades Vendidas" value={data.kpis.unitsSold} change={4.4} icon={Package} />
+        <KPICard label="LTV Médio" value={data.kpis.avgLtv} change={1.9} icon={Heart} />
         <KPICard label="LTV/CAC" value={data.kpis.ltvCac} change={5.6} icon={Target} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <ChartCard title="Revenue vs Marketing Spend">
+        <ChartCard title="Receita x Investimento em Mídia">
           <ResponsiveContainer width="100%" height={280}>
             <AreaChart data={data.monthlyTrend}>
               <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-              <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#6B7280" }} axisLine={false} tickLine={false} />
-              <YAxis
-                tick={{ fontSize: 11, fill: "#6B7280" }}
-                axisLine={false}
-                tickLine={false}
-                tickFormatter={(value) => formatCompactNumber(Number(value))}
-              />
-              <Tooltip
-                formatter={(value: number, name: string) => [
-                  formatCurrencyCompact(Number(value)),
-                  name === "revenue" ? "Revenue" : "Spend",
-                ]}
-                contentStyle={{
-                  borderRadius: 12,
-                  border: "1px solid #E5E7EB",
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-                }}
-              />
-              <Area
-                type="monotone"
-                dataKey="revenue"
-                stroke={COLORS.revenue}
-                fill={COLORS.revenue}
-                fillOpacity={0.18}
-                strokeWidth={2.5}
-                name="revenue"
-              />
-              <Area
-                type="monotone"
-                dataKey="spend"
-                stroke={COLORS.spend}
-                fill={COLORS.spend}
-                fillOpacity={0.06}
-                strokeWidth={2.5}
-                name="spend"
-              />
-              <Legend wrapperStyle={{ fontSize: 12 }} />
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Tooltip />
+              <Area type="monotone" dataKey="revenue" stroke={COLORS.revenue} fill={COLORS.revenue} />
+              <Area type="monotone" dataKey="spend" stroke={COLORS.spend} fill={COLORS.spend} />
+              <Legend />
             </AreaChart>
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="ROAS Trend">
+        <ChartCard title="Tendência de ROAS">
           <ResponsiveContainer width="100%" height={280}>
-            <LineChart data={roasTrendData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-              <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#6B7280" }} axisLine={false} tickLine={false} />
-              <YAxis
-                tick={{ fontSize: 11, fill: "#6B7280" }}
-                axisLine={false}
-                tickLine={false}
-                domain={getRoasChartDomain(roasTrendData)}
-                tickFormatter={(value) => `${formatDecimal(Number(value), 1)}x`}
-              />
-              <Tooltip
-                formatter={(value: number) => [`${formatDecimal(Number(value), 2)}x`, "ROAS"]}
-                contentStyle={{
-                  borderRadius: 12,
-                  border: "1px solid #E5E7EB",
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-                }}
-              />
-              <Line
-                type="monotone"
-                dataKey="value"
-                stroke={COLORS.roas}
-                strokeWidth={2.5}
-                dot={{ fill: COLORS.roas, r: 3 }}
-                activeDot={{ r: 5 }}
-                name="ROAS"
-              />
+            <LineChart data={data.monthlyTrend}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="month" />
+              <YAxis />
+              <Tooltip />
+              <Line type="monotone" dataKey="roas" stroke={COLORS.revenue} />
             </LineChart>
-          </ResponsiveContainer>
-        </ChartCard>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <ChartCard title="CAC Trend">
-          <ResponsiveContainer width="100%" height={240}>
-            <LineChart data={cacTrendData}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-              <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#6B7280" }} axisLine={false} tickLine={false} />
-              <YAxis
-                tick={{ fontSize: 11, fill: "#6B7280" }}
-                axisLine={false}
-                tickLine={false}
-                domain={getCacChartDomain(cacTrendData)}
-                tickFormatter={(value) => formatCompactNumber(Number(value))}
-              />
-              <Tooltip
-                formatter={(value: number) => [formatCurrencyCompact(Number(value)), "CAC"]}
-                contentStyle={{
-                  borderRadius: 12,
-                  border: "1px solid #E5E7EB",
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-                }}
-              />
-              <Line
-                type="monotone"
-                dataKey="value"
-                stroke={COLORS.cac}
-                strokeWidth={2.5}
-                dot={{ fill: COLORS.cac, r: 3 }}
-                activeDot={{ r: 5 }}
-                name="CAC"
-              />
-            </LineChart>
-          </ResponsiveContainer>
-        </ChartCard>
-
-        <ChartCard title="Revenue by Channel">
-          <ResponsiveContainer width="100%" height={240}>
-            <BarChart data={data.channelRevenue} layout="vertical" margin={{ top: 5, right: 10, left: 20, bottom: 5 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-              <XAxis
-                type="number"
-                tick={{ fontSize: 11, fill: "#6B7280" }}
-                axisLine={false}
-                tickLine={false}
-                tickFormatter={(value) => formatCompactNumber(Number(value))}
-              />
-              <YAxis
-                dataKey="channel"
-                type="category"
-                tick={{ fontSize: 10, fill: "#6B7280" }}
-                axisLine={false}
-                tickLine={false}
-                width={95}
-              />
-              <Tooltip
-                formatter={(value: number) => [formatCurrencyCompact(Number(value)), "Revenue"]}
-                contentStyle={{
-                  borderRadius: 12,
-                  border: "1px solid #E5E7EB",
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-                }}
-              />
-              <Bar dataKey="revenue" name="Revenue" radius={[0, 6, 6, 0]}>
-                {data.channelRevenue.map((_, i) => (
-                  <Cell key={i} fill={CHANNEL_COLORS[i % CHANNEL_COLORS.length]} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-
-        <ChartCard title="Revenue by Category">
-          <ResponsiveContainer width="100%" height={240}>
-            <PieChart>
-              <Pie
-                data={data.categoryRevenue}
-                dataKey="pct"
-                nameKey="category"
-                cx="50%"
-                cy="50%"
-                outerRadius={82}
-                label={({ pct }) => `${pct}%`}
-                labelLine={false}
-              >
-                {data.categoryRevenue.map((_, i) => (
-                  <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />
-                ))}
-              </Pie>
-              <Tooltip
-                formatter={(value: number, _name, props: any) => [`${formatDecimal(Number(value), 1)}%`, props?.payload?.category]}
-                contentStyle={{
-                  borderRadius: 12,
-                  border: "1px solid #E5E7EB",
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-                }}
-              />
-              <Legend wrapperStyle={{ fontSize: 11 }} />
-            </PieChart>
-          </ResponsiveContainer>
-        </ChartCard>
-      </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <ChartCard title="Executive Funnel">
-          <div className="space-y-3">
-            {data.funnelData.map((stage, i) => (
-              <div key={stage.stage}>
-                <div className="flex justify-between text-xs mb-1">
-                  <span className="font-medium text-foreground">{stage.stage}</span>
-                  <span className="text-muted-foreground">{formatCompactNumber(stage.value)}</span>
-                </div>
-                <div className="w-full bg-muted rounded-full h-6 overflow-hidden">
-                  <div
-                    className="h-full rounded-full transition-all duration-700"
-                    style={{
-                      width: `${data.funnelData[0] ? (stage.value / data.funnelData[0].value) * 100 : 0}%`,
-                      backgroundColor: FUNNEL_COLORS[i % FUNNEL_COLORS.length],
-                    }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </ChartCard>
-
-        <ChartCard title="Social Growth">
-          <ResponsiveContainer width="100%" height={240}>
-            <AreaChart data={data.socialTrend}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-              <XAxis dataKey="month" tick={{ fontSize: 11, fill: "#6B7280" }} axisLine={false} tickLine={false} />
-              <YAxis
-                tick={{ fontSize: 11, fill: "#6B7280" }}
-                axisLine={false}
-                tickLine={false}
-                tickFormatter={(v) => formatCompactNumber(Number(v))}
-              />
-              <Tooltip
-                formatter={(value: number) => [formatCompactNumber(Number(value)), "Followers"]}
-                contentStyle={{
-                  borderRadius: 12,
-                  border: "1px solid #E5E7EB",
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-                }}
-              />
-              <Area
-                type="monotone"
-                dataKey="followers"
-                stroke={COLORS.revenue}
-                fill={COLORS.revenue}
-                fillOpacity={0.12}
-                strokeWidth={2.5}
-                name="Followers"
-              />
-            </AreaChart>
-          </ResponsiveContainer>
-        </ChartCard>
-
-        <ChartCard title="Revenue by Region">
-          <ResponsiveContainer width="100%" height={240}>
-            <BarChart data={data.regionRevenue}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#E5E7EB" />
-              <XAxis dataKey="region" tick={{ fontSize: 10, fill: "#6B7280" }} axisLine={false} tickLine={false} />
-              <YAxis
-                tick={{ fontSize: 11, fill: "#6B7280" }}
-                axisLine={false}
-                tickLine={false}
-                tickFormatter={(value) => formatCompactNumber(Number(value))}
-              />
-              <Tooltip
-                formatter={(value: number) => [formatCurrencyCompact(Number(value)), "Revenue"]}
-                contentStyle={{
-                  borderRadius: 12,
-                  border: "1px solid #E5E7EB",
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-                }}
-              />
-              <Bar dataKey="revenue" fill={COLORS.revenue} radius={[6, 6, 0, 0]} name="Revenue" />
-            </BarChart>
           </ResponsiveContainer>
         </ChartCard>
       </div>

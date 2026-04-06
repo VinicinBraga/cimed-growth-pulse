@@ -13,14 +13,14 @@ import {
 import { useState } from "react";
 
 const navItems = [
-  { id: "overview", label: "Executive Overview", icon: BarChart3 },
-  { id: "marketing", label: "Marketing Performance", icon: TrendingUp },
-  { id: "sales", label: "Sales Performance", icon: ShoppingCart },
-  { id: "funnel", label: "Funnel Performance", icon: Filter },
-  { id: "social", label: "Social Media Intelligence", icon: Share2 },
-  { id: "product", label: "Product Growth", icon: Package },
-  { id: "efficiency", label: "Growth Efficiency", icon: Gauge },
-  { id: "drivers", label: "Growth Drivers", icon: Zap },
+  { id: "overview", label: "Visão Executiva", icon: BarChart3 },
+  { id: "marketing", label: "Performance de Marketing", icon: TrendingUp },
+  { id: "sales", label: "Performance de Vendas", icon: ShoppingCart },
+  { id: "funnel", label: "Performance do Funil", icon: Filter },
+  { id: "social", label: "Inteligência de Social Media", icon: Share2 },
+  { id: "product", label: "Crescimento de Produtos", icon: Package },
+  { id: "efficiency", label: "Eficiência de Growth", icon: Gauge },
+  { id: "drivers", label: "Drivers de Crescimento", icon: Zap },
 ];
 
 interface DashboardSidebarProps {
