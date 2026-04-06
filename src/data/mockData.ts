@@ -1,13 +1,13 @@
-// Monthly trend data
+// Dados de tendência mensal
 export const monthlyTrend = [
   { month: "Jul", revenue: 42.5, spend: 8.2, roas: 5.2, cac: 32, ltv: 185, customers: 1320, units: 45200 },
-  { month: "Aug", revenue: 44.1, spend: 8.8, roas: 5.0, cac: 34, ltv: 188, customers: 1380, units: 47100 },
-  { month: "Sep", revenue: 46.3, spend: 9.1, roas: 5.1, cac: 31, ltv: 192, customers: 1450, units: 49800 },
-  { month: "Oct", revenue: 48.7, spend: 9.5, roas: 5.1, cac: 29, ltv: 195, customers: 1520, units: 52300 },
+  { month: "Ago", revenue: 44.1, spend: 8.8, roas: 5.0, cac: 34, ltv: 188, customers: 1380, units: 47100 },
+  { month: "Set", revenue: 46.3, spend: 9.1, roas: 5.1, cac: 31, ltv: 192, customers: 1450, units: 49800 },
+  { month: "Out", revenue: 48.7, spend: 9.5, roas: 5.1, cac: 29, ltv: 195, customers: 1520, units: 52300 },
   { month: "Nov", revenue: 52.1, spend: 10.2, roas: 5.1, cac: 28, ltv: 198, customers: 1610, units: 55800 },
-  { month: "Dec", revenue: 58.4, spend: 11.8, roas: 4.9, cac: 30, ltv: 201, customers: 1720, units: 61200 },
+  { month: "Dez", revenue: 58.4, spend: 11.8, roas: 4.9, cac: 30, ltv: 201, customers: 1720, units: 61200 },
   { month: "Jan", revenue: 51.2, spend: 10.5, roas: 4.9, cac: 31, ltv: 203, customers: 1580, units: 54100 },
-  { month: "Feb", revenue: 53.8, spend: 10.8, roas: 5.0, cac: 29, ltv: 206, customers: 1650, units: 56900 },
+  { month: "Fev", revenue: 53.8, spend: 10.8, roas: 5.0, cac: 29, ltv: 206, customers: 1650, units: 56900 },
   { month: "Mar", revenue: 56.2, spend: 11.2, roas: 5.0, cac: 28, ltv: 210, customers: 1740, units: 59400 },
 ];
 
@@ -16,33 +16,33 @@ export const channelRevenue = [
   { channel: "Meta", revenue: 14.2, spend: 3.2, roas: 4.4, color: "#1877F2" },
   { channel: "TikTok", revenue: 8.6, spend: 1.8, roas: 4.8, color: "#000000" },
   { channel: "YouTube", revenue: 5.8, spend: 1.2, roas: 4.8, color: "#FF0000" },
-  { channel: "Organic", revenue: 6.2, spend: 0.8, roas: 7.8, color: "#22C55E" },
-  { channel: "Direct", revenue: 3.0, spend: 0.4, roas: 7.5, color: "#6B7280" },
+  { channel: "Orgânico", revenue: 6.2, spend: 0.8, roas: 7.8, color: "#22C55E" },
+  { channel: "Direto", revenue: 3.0, spend: 0.4, roas: 7.5, color: "#6B7280" },
 ];
 
 export const categoryRevenue = [
-  { category: "OTC Medicines", revenue: 22.8, units: 24500, pct: 40.6 },
-  { category: "Vitamins & Suppl.", revenue: 14.1, units: 15200, pct: 25.1 },
-  { category: "Personal Care", revenue: 9.8, units: 10800, pct: 17.4 },
-  { category: "Dermatology", revenue: 5.6, units: 5100, pct: 10.0 },
-  { category: "Pediatric", revenue: 3.9, units: 3800, pct: 6.9 },
+  { category: "Medicamentos OTC", revenue: 22.8, units: 24500, pct: 40.6 },
+  { category: "Vitaminas e Supl.", revenue: 14.1, units: 15200, pct: 25.1 },
+  { category: "Cuidados Pessoais", revenue: 9.8, units: 10800, pct: 17.4 },
+  { category: "Dermatologia", revenue: 5.6, units: 5100, pct: 10.0 },
+  { category: "Pediátrico", revenue: 3.9, units: 3800, pct: 6.9 },
 ];
 
 export const regionRevenue = [
-  { region: "Southeast", revenue: 24.1 },
-  { region: "South", revenue: 12.8 },
-  { region: "Northeast", revenue: 9.4 },
-  { region: "Central-West", revenue: 6.2 },
-  { region: "North", revenue: 3.7 },
+  { region: "Sudeste", revenue: 24.1 },
+  { region: "Sul", revenue: 12.8 },
+  { region: "Nordeste", revenue: 9.4 },
+  { region: "Centro-Oeste", revenue: 6.2 },
+  { region: "Norte", revenue: 3.7 },
 ];
 
 export const funnelData = [
-  { stage: "Visitors", value: 2450000, rate: 100 },
+  { stage: "Visitantes", value: 2450000, rate: 100 },
   { stage: "Leads", value: 185000, rate: 7.55 },
   { stage: "MQL", value: 48200, rate: 26.05 },
   { stage: "SQL", value: 18500, rate: 38.38 },
-  { stage: "Opportunities", value: 8200, rate: 44.32 },
-  { stage: "Customers", value: 1740, rate: 21.22 },
+  { stage: "Oportunidades", value: 8200, rate: 44.32 },
+  { stage: "Clientes", value: 1740, rate: 21.22 },
 ];
 
 export const socialData = {
@@ -58,13 +58,13 @@ export const socialData = {
 
 export const socialTrend = [
   { month: "Jul", followers: 4120000, newFollowers: 95000, engagements: 1850000 },
-  { month: "Aug", followers: 4250000, newFollowers: 102000, engagements: 1920000 },
-  { month: "Sep", followers: 4380000, newFollowers: 108000, engagements: 2010000 },
-  { month: "Oct", followers: 4490000, newFollowers: 112000, engagements: 2080000 },
+  { month: "Ago", followers: 4250000, newFollowers: 102000, engagements: 1920000 },
+  { month: "Set", followers: 4380000, newFollowers: 108000, engagements: 2010000 },
+  { month: "Out", followers: 4490000, newFollowers: 112000, engagements: 2080000 },
   { month: "Nov", followers: 4600000, newFollowers: 118000, engagements: 2150000 },
-  { month: "Dec", followers: 4720000, newFollowers: 122000, engagements: 2250000 },
+  { month: "Dez", followers: 4720000, newFollowers: 122000, engagements: 2250000 },
   { month: "Jan", followers: 4780000, newFollowers: 115000, engagements: 2180000 },
-  { month: "Feb", followers: 4850000, newFollowers: 125000, engagements: 2280000 },
+  { month: "Fev", followers: 4850000, newFollowers: 125000, engagements: 2280000 },
   { month: "Mar", followers: 4980000, newFollowers: 128000, engagements: 2340000 },
 ];
 
@@ -100,18 +100,18 @@ export const brandRevenue = [
 ];
 
 export const marketingFunnel = [
-  { stage: "Impressions", value: 42000000 },
-  { stage: "Clicks", value: 1260000 },
+  { stage: "Impressões", value: 42000000 },
+  { stage: "Cliques", value: 1260000 },
   { stage: "Leads", value: 185000 },
-  { stage: "Purchases", value: 1740 },
+  { stage: "Compras", value: 1740 },
 ];
 
 export const campaignData = [
-  { campaign: "Benegrip Winter 2026", spend: 2.1, revenue: 11.2, roas: 5.3, cpa: 24, status: "Active" },
-  { campaign: "Lavitan Brand Awareness", spend: 1.8, revenue: 8.4, roas: 4.7, cpa: 28, status: "Active" },
-  { campaign: "Cimegripe Seasonal", spend: 1.2, revenue: 6.8, roas: 5.7, cpa: 21, status: "Active" },
-  { campaign: "Zero-Cal Digital Push", spend: 0.9, revenue: 3.8, roas: 4.2, cpa: 35, status: "Paused" },
-  { campaign: "Doril Pain Relief", spend: 0.8, revenue: 3.5, roas: 4.4, cpa: 31, status: "Active" },
+  { campaign: "Benegrip Inverno 2026", spend: 2.1, revenue: 11.2, roas: 5.3, cpa: 24, status: "Ativa" },
+  { campaign: "Lavitan Awareness de Marca", spend: 1.8, revenue: 8.4, roas: 4.7, cpa: 28, status: "Ativa" },
+  { campaign: "Cimegripe Sazonal", spend: 1.2, revenue: 6.8, roas: 5.7, cpa: 21, status: "Ativa" },
+  { campaign: "Zero-Cal Impulso Digital", spend: 0.9, revenue: 3.8, roas: 4.2, cpa: 35, status: "Pausada" },
+  { campaign: "Doril Alívio da Dor", spend: 0.8, revenue: 3.5, roas: 4.4, cpa: 31, status: "Ativa" },
 ];
 
 export const efficiencyByChannel = [
@@ -119,7 +119,7 @@ export const efficiencyByChannel = [
   { channel: "Meta", cac: 32, ltv: 195, ltvCac: 6.1, roas: 4.4, revenuePerOrder: 76, costPerOrder: 17.3 },
   { channel: "TikTok", cac: 25, ltv: 180, ltvCac: 7.2, roas: 4.8, revenuePerOrder: 68, costPerOrder: 14.2 },
   { channel: "YouTube", cac: 35, ltv: 220, ltvCac: 6.3, roas: 4.8, revenuePerOrder: 88, costPerOrder: 18.3 },
-  { channel: "Organic", cac: 12, ltv: 240, ltvCac: 20.0, roas: 7.8, revenuePerOrder: 95, costPerOrder: 12.2 },
+  { channel: "Orgânico", cac: 12, ltv: 240, ltvCac: 20.0, roas: 7.8, revenuePerOrder: 95, costPerOrder: 12.2 },
 ];
 
 export const formatCurrency = (value: number, millions = true) => {

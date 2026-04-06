@@ -85,10 +85,10 @@ function formatCurrencyCompact(value: number) {
 
 export function MarketingPerformance() {
   const marketingFunnel = [
-    { stage: "Impressions", value: 42000000 },
-    { stage: "Clicks", value: 1260000 },
+    { stage: "Impressões", value: 42000000 },
+    { stage: "Cliques", value: 1260000 },
     { stage: "Leads", value: 185000 },
-    { stage: "Purchases", value: 1740 },
+    { stage: "Compras", value: 1740 },
   ];
 
   const channelRevenueStyled = channelRevenue.map((item, index) => ({
@@ -98,45 +98,38 @@ export function MarketingPerformance() {
 
   return (
     <div className="space-y-6">
-       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <KPICard label="Spend" value="R$ 11.2M" change={3.7} icon={DollarSign} />
-        <KPICard label="Revenue" value="R$ 56.2M" change={4.5} icon={TrendingUp} />
+
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <KPICard label="Investimento" value="R$ 11.2M" change={3.7} icon={DollarSign} />
+        <KPICard label="Receita" value="R$ 56.2M" change={4.5} icon={TrendingUp} />
         <KPICard label="ROAS" value="5.0x" change={0.0} icon={Target} />
-        <KPICard label="Impressions" value="42M" change={8.2} icon={Eye} />
-        <KPICard label="Clicks" value="1.26M" change={5.1} icon={MousePointer} />
+        <KPICard label="Impressões" value="42M" change={8.2} icon={Eye} />
+        <KPICard label="Cliques" value="1.26M" change={5.1} icon={MousePointer} />
         <KPICard label="Leads" value="185K" change={6.8} icon={Users} />
-        <KPICard label="Purchases" value="1,740" change={5.5} icon={ShoppingCart} />
+        <KPICard label="Compras" value="1.740" change={5.5} icon={ShoppingCart} />
         <KPICard label="CPA" value="R$ 28" change={-3.4} icon={BarChart3} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <ChartCard title="Spend vs Revenue (R$ M)">
+
+        <ChartCard title="Investimento x Receita (R$ M)">
           <ResponsiveContainer width="100%" height={280}>
             <AreaChart data={monthlyTrend}>
               <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
-              <XAxis
-                dataKey="month"
-                tick={{ fontSize: 11, fill: COLORS.gray }}
-                axisLine={false}
-                tickLine={false}
-              />
-              <YAxis
-                tick={{ fontSize: 11, fill: COLORS.gray }}
-                axisLine={false}
-                tickLine={false}
-              />
+
+              <XAxis dataKey="month" />
+
+              <YAxis />
+
               <Tooltip
                 formatter={(value: number, name: string) => [
                   formatCurrencyCompact(Number(value) * 1000000),
-                  name === "revenue" ? "Revenue" : "Spend",
+                  name === "revenue" ? "Receita" : "Investimento",
                 ]}
-                contentStyle={{
-                  borderRadius: 12,
-                  border: "1px solid #E5E7EB",
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-                }}
               />
+
               <Legend />
+
               <Area
                 type="monotone"
                 dataKey="revenue"
@@ -144,8 +137,9 @@ export function MarketingPerformance() {
                 fill={COLORS.primary}
                 fillOpacity={0.18}
                 strokeWidth={2.5}
-                name="Revenue"
+                name="Receita"
               />
+
               <Area
                 type="monotone"
                 dataKey="spend"
@@ -153,206 +147,193 @@ export function MarketingPerformance() {
                 fill={COLORS.black}
                 fillOpacity={0.06}
                 strokeWidth={2.5}
-                name="Spend"
+                name="Investimento"
               />
+
             </AreaChart>
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="ROAS by Channel">
+        <ChartCard title="ROAS por Canal">
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={channelRevenueStyled}>
+
               <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
-              <XAxis
-                dataKey="channel"
-                tick={{ fontSize: 10, fill: COLORS.gray }}
-                axisLine={false}
-                tickLine={false}
-              />
-              <YAxis
-                tick={{ fontSize: 11, fill: COLORS.gray }}
-                axisLine={false}
-                tickLine={false}
-              />
+
+              <XAxis dataKey="channel" />
+
+              <YAxis />
+
               <Tooltip
-                formatter={(value: number) => [`${Number(value).toFixed(1)}x`, "ROAS"]}
-                contentStyle={{
-                  borderRadius: 12,
-                  border: "1px solid #E5E7EB",
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-                }}
+                formatter={(value: number) => [
+                  `${Number(value).toFixed(1)}x`,
+                  "ROAS",
+                ]}
               />
+
               <Bar dataKey="roas" name="ROAS" radius={[8, 8, 0, 0]}>
                 {channelRevenueStyled.map((entry, i) => (
                   <Cell key={i} fill={entry.color} />
                 ))}
               </Bar>
+
             </BarChart>
           </ResponsiveContainer>
         </ChartCard>
+
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <ChartCard title="Spend by Channel (R$ M)">
+
+        <ChartCard title="Investimento por Canal (R$ M)">
           <ResponsiveContainer width="100%" height={240}>
             <BarChart data={channelRevenueStyled} layout="vertical">
+
               <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
-              <XAxis
-                type="number"
-                tick={{ fontSize: 11, fill: COLORS.gray }}
-                axisLine={false}
-                tickLine={false}
-              />
+
+              <XAxis type="number" />
+
               <YAxis
                 dataKey="channel"
                 type="category"
-                tick={{ fontSize: 10, fill: COLORS.gray }}
-                axisLine={false}
-                tickLine={false}
-                width={88}
+                width={90}
               />
+
               <Tooltip
-                formatter={(value: number) => [`R$ ${Number(value).toFixed(1)}M`, "Spend"]}
-                contentStyle={{
-                  borderRadius: 12,
-                  border: "1px solid #E5E7EB",
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-                }}
+                formatter={(value: number) => [
+                  `R$ ${Number(value).toFixed(1)}M`,
+                  "Investimento",
+                ]}
               />
-              <Bar dataKey="spend" name="Spend" radius={[0, 8, 8, 0]}>
+
+              <Bar dataKey="spend" name="Investimento">
                 {channelRevenueStyled.map((entry, i) => (
                   <Cell key={i} fill={entry.color} />
                 ))}
               </Bar>
+
             </BarChart>
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="Marketing Funnel">
+        <ChartCard title="Funil de Marketing">
+
           <div className="space-y-4">
+
             {marketingFunnel.map((item, index) => (
+
               <div key={item.stage}>
+
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-sm font-medium text-foreground">{item.stage}</span>
-                  <span className="text-xs text-muted-foreground">
+                  <span className="text-sm font-medium">
+                    {item.stage}
+                  </span>
+
+                  <span className="text-xs">
                     {formatCompactNumber(item.value)}
                   </span>
                 </div>
 
                 <div className="w-full h-5 rounded-full bg-muted overflow-hidden">
+
                   <div
-                    className="h-full rounded-full transition-all duration-500"
+                    className="h-full rounded-full"
                     style={{
                       width: `${(item.value / marketingFunnel[0].value) * 100}%`,
                       backgroundColor: FUNNEL_COLORS[index],
                     }}
                   />
+
                 </div>
+
               </div>
+
             ))}
+
           </div>
+
         </ChartCard>
 
-        <ChartCard title="CTR Trend (%)">
+        <ChartCard title="Tendência de CTR (%)">
+
           <ResponsiveContainer width="100%" height={240}>
             <LineChart data={ctrData}>
+
               <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
-              <XAxis
-                dataKey="month"
-                tick={{ fontSize: 11, fill: COLORS.gray }}
-                axisLine={false}
-                tickLine={false}
-              />
-              <YAxis
-                tick={{ fontSize: 11, fill: COLORS.gray }}
-                axisLine={false}
-                tickLine={false}
-                domain={[2, 4]}
-              />
+
+              <XAxis dataKey="month" />
+
+              <YAxis domain={[2,4]} />
+
               <Tooltip
-                formatter={(value: number) => [`${value.toFixed(2).replace(".", ",")}%`, "CTR"]}
-                contentStyle={{
-                  borderRadius: 12,
-                  border: "1px solid #E5E7EB",
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-                }}
+                formatter={(value: number) => [
+                  `${value.toFixed(2).replace(".",",")}%`,
+                  "CTR",
+                ]}
               />
+
               <Line
                 type="monotone"
                 dataKey="ctr"
                 stroke={COLORS.primary}
                 strokeWidth={2.5}
-                dot={{ fill: COLORS.black, r: 3.5, stroke: COLORS.primary, strokeWidth: 2 }}
-                activeDot={{ r: 5, fill: COLORS.primary, stroke: COLORS.black, strokeWidth: 2 }}
                 name="CTR"
               />
+
             </LineChart>
           </ResponsiveContainer>
+
         </ChartCard>
+
       </div>
 
-      <ChartCard title="Campaign Ranking">
+      <ChartCard title="Ranking de Campanhas">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-border">
-                <th className="text-left py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
-                  Campaign
+              <tr>
+                <th className="text-left py-3 px-4">
+                  Campanha
                 </th>
-                <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
-                  Spend
+                <th className="text-right py-3 px-4">
+                  Investimento
                 </th>
-                <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
-                  Revenue
+                <th className="text-right py-3 px-4">
+                  Receita
                 </th>
-                <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
+                <th className="text-right py-3 px-4">
                   ROAS
                 </th>
-                <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
+                <th className="text-right py-3 px-4">
                   CPA
                 </th>
-                <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
+                <th className="text-right py-3 px-4">
                   Status
                 </th>
               </tr>
             </thead>
             <tbody>
-              {campaignData.map((c, index) => (
-                <tr
-                  key={c.campaign}
-                  className="border-b border-border/50 hover:bg-muted/30 transition-colors"
-                >
-                  <td className="py-3 px-4 font-medium text-foreground">
-                    <div className="flex items-center gap-3">
-                      <span
-                        className="h-2.5 w-2.5 rounded-full"
-                        style={{ backgroundColor: CHANNEL_COLORS[index % CHANNEL_COLORS.length] }}
-                      />
-                      {c.campaign}
-                    </div>
+              {campaignData.map((c,index)=>(
+                <tr key={c.campaign}>
+                  <td className="py-3 px-4">
+                    {c.campaign}
                   </td>
-                  <td className="py-3 px-4 text-right text-muted-foreground">R$ {c.spend}M</td>
-                  <td className="py-3 px-4 text-right text-foreground font-medium">
+                  <td className="py-3 px-4 text-right">
+                    R$ {c.spend}M
+                  </td>
+                  <td className="py-3 px-4 text-right">
                     R$ {c.revenue}M
                   </td>
-                  <td
-                    className="py-3 px-4 text-right font-semibold"
-                    style={{ color: c.roas >= 5 ? COLORS.black : COLORS.primary }}
-                  >
+                  <td className="py-3 px-4 text-right">
                     {c.roas}x
                   </td>
-                  <td className="py-3 px-4 text-right text-muted-foreground">R$ {c.cpa}</td>
                   <td className="py-3 px-4 text-right">
-                    <span
-                      className="px-2.5 py-1 rounded-full text-xs font-medium border"
-                      style={{
-                        backgroundColor: c.status === "Active" ? "#FEF3C7" : "#F3F4F6",
-                        color: c.status === "Active" ? "#111111" : "#6B7280",
-                        borderColor: c.status === "Active" ? "#F6C338" : "#D1D5DB",
-                      }}
-                    >
-                      {c.status}
-                    </span>
+                    R$ {c.cpa}
+                  </td>
+                  <td className="py-3 px-4 text-right">
+                    {c.status === "Active"
+                      ? "Ativa"
+                      : "Pausada"}
                   </td>
                 </tr>
               ))}

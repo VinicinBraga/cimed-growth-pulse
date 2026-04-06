@@ -58,25 +58,25 @@ function formatCompactNumber(value: number) {
 
 export function FunnelPerformance() {
   const funnelData = [
-    { name: "Visitors", value: 42000000, fill: FUNNEL_COLORS[0] },
-    { name: "Clicks", value: 1260000, fill: FUNNEL_COLORS[1] },
+    { name: "Visitantes", value: 42000000, fill: FUNNEL_COLORS[0] },
+    { name: "Cliques", value: 1260000, fill: FUNNEL_COLORS[1] },
     { name: "Leads", value: 185000, fill: FUNNEL_COLORS[2] },
-    { name: "Qualified", value: 24800, fill: FUNNEL_COLORS[3] },
-    { name: "Customers", value: 1740, fill: FUNNEL_COLORS[4] },
+    { name: "Qualificados", value: 24800, fill: FUNNEL_COLORS[3] },
+    { name: "Clientes", value: 1740, fill: FUNNEL_COLORS[4] },
   ];
 
   const conversionByStage = [
-    { stage: "Visit → Click", rate: 3.0 },
-    { stage: "Click → Lead", rate: 14.7 },
-    { stage: "Lead → Qualified", rate: 13.4 },
-    { stage: "Qualified → Customer", rate: 7.0 },
+    { stage: "Visita → Clique", rate: 3.0 },
+    { stage: "Clique → Lead", rate: 14.7 },
+    { stage: "Lead → Qualificado", rate: 13.4 },
+    { stage: "Qualificado → Cliente", rate: 7.0 },
   ];
 
   const dropoffData = [
-    { stage: "Visitors", lost: 40740000 },
-    { stage: "Clicks", lost: 1075000 },
+    { stage: "Visitantes", lost: 40740000 },
+    { stage: "Cliques", lost: 1075000 },
     { stage: "Leads", lost: 160200 },
-    { stage: "Qualified", lost: 23060 },
+    { stage: "Qualificados", lost: 23060 },
   ];
 
   const funnelTrend = monthlyTrend.map((item, index) => ({
@@ -94,19 +94,19 @@ export function FunnelPerformance() {
 
   return (
     <div className="space-y-6">
-       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <KPICard label="Visitors" value="42M" change={8.2} icon={Users} />
-        <KPICard label="Clicks" value="1.26M" change={5.1} icon={MousePointerClick} />
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <KPICard label="Visitantes" value="42M" change={8.2} icon={Users} />
+        <KPICard label="Cliques" value="1.26M" change={5.1} icon={MousePointerClick} />
         <KPICard label="Leads" value="185K" change={6.8} icon={UserPlus} />
-        <KPICard label="Customers" value="1,740" change={5.5} icon={ShoppingCart} />
-        <KPICard label="Visit → Click" value="3.0%" change={0.2} icon={Percent} />
-        <KPICard label="Click → Lead" value="14.7%" change={0.8} icon={TrendingUp} />
-        <KPICard label="Lead → Customer" value="0.9%" change={0.1} icon={Filter} />
-        <KPICard label="Overall CVR" value="0.004%" change={0.0} icon={BarChart3} />
+        <KPICard label="Clientes" value="1,740" change={5.5} icon={ShoppingCart} />
+        <KPICard label="Visita → Clique" value="3.0%" change={0.2} icon={Percent} />
+        <KPICard label="Clique → Lead" value="14.7%" change={0.8} icon={TrendingUp} />
+        <KPICard label="Lead → Cliente" value="0.9%" change={0.1} icon={Filter} />
+        <KPICard label="CVR Geral" value="0.004%" change={0.0} icon={BarChart3} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <ChartCard title="Full Funnel">
+        <ChartCard title="Funil Completo">
           <ResponsiveContainer width="100%" height={320}>
             <FunnelChart>
               <Tooltip
@@ -130,7 +130,7 @@ export function FunnelPerformance() {
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="Conversion Rate by Stage (%)">
+        <ChartCard title="Taxa de Conversão por Etapa (%)">
           <ResponsiveContainer width="100%" height={320}>
             <BarChart data={conversionByStage}>
               <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
@@ -146,7 +146,7 @@ export function FunnelPerformance() {
                 tickLine={false}
               />
               <Tooltip
-                formatter={(value: number) => [`${value.toFixed(1).replace(".", ",")}%`, "Rate"]}
+                formatter={(value: number) => [`${value.toFixed(1).replace(".", ",")}%`, "Taxa"]}
                 contentStyle={{
                   borderRadius: 12,
                   border: "1px solid #E5E7EB",
@@ -164,7 +164,7 @@ export function FunnelPerformance() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <ChartCard title="Drop-off by Stage">
+        <ChartCard title="Perda por Etapa">
           <ResponsiveContainer width="100%" height={240}>
             <BarChart data={dropoffData} layout="vertical">
               <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
@@ -181,10 +181,10 @@ export function FunnelPerformance() {
                 tick={{ fontSize: 11, fill: COLORS.gray }}
                 axisLine={false}
                 tickLine={false}
-                width={70}
+                width={80}
               />
               <Tooltip
-                formatter={(value: number) => [formatCompactNumber(Number(value)), "Lost"]}
+                formatter={(value: number) => [formatCompactNumber(Number(value)), "Perdidos"]}
                 contentStyle={{
                   borderRadius: 12,
                   border: "1px solid #E5E7EB",
@@ -200,7 +200,7 @@ export function FunnelPerformance() {
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="Conversion Trend">
+        <ChartCard title="Tendência de Conversão">
           <ResponsiveContainer width="100%" height={240}>
             <LineChart data={funnelTrend}>
               <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
@@ -218,7 +218,7 @@ export function FunnelPerformance() {
               <Tooltip
                 formatter={(value: number, name: string) => [
                   `${Number(value).toFixed(2).replace(".", ",")}%`,
-                  name === "visitToLead" ? "Visit → Lead" : "Lead → Customer",
+                  name === "visitToLead" ? "Visita → Lead" : "Lead → Cliente",
                 ]}
                 contentStyle={{
                   borderRadius: 12,
@@ -233,7 +233,7 @@ export function FunnelPerformance() {
                 strokeWidth={2.5}
                 dot={{ fill: COLORS.primary, r: 3.5 }}
                 activeDot={{ r: 5 }}
-                name="Visit → Lead"
+                name="Visita → Lead"
               />
               <Line
                 type="monotone"
@@ -242,13 +242,13 @@ export function FunnelPerformance() {
                 strokeWidth={2.5}
                 dot={{ fill: COLORS.black, r: 3.5 }}
                 activeDot={{ r: 5 }}
-                name="Lead → Customer"
+                name="Lead → Cliente"
               />
             </LineChart>
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="Stage Volume Trend">
+        <ChartCard title="Tendência de Volume por Etapa">
           <ResponsiveContainer width="100%" height={240}>
             <AreaChart data={stageVolumeTrend}>
               <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
@@ -267,7 +267,7 @@ export function FunnelPerformance() {
               <Tooltip
                 formatter={(value: number, name: string) => [
                   formatCompactNumber(Number(value)),
-                  name === "visitors" ? "Visitors" : name === "leads" ? "Leads" : "Customers",
+                  name === "visitors" ? "Visitantes" : name === "leads" ? "Leads" : "Clientes",
                 ]}
                 contentStyle={{
                   borderRadius: 12,
@@ -282,7 +282,7 @@ export function FunnelPerformance() {
                 fill={COLORS.lightGray}
                 fillOpacity={0.18}
                 strokeWidth={2}
-                name="Visitors"
+                name="Visitantes"
               />
               <Area
                 type="monotone"
@@ -300,39 +300,39 @@ export function FunnelPerformance() {
                 fill={COLORS.black}
                 fillOpacity={0.08}
                 strokeWidth={2}
-                name="Customers"
+                name="Clientes"
               />
             </AreaChart>
           </ResponsiveContainer>
         </ChartCard>
       </div>
 
-      <ChartCard title="Funnel Step Summary">
+      <ChartCard title="Resumo das Etapas do Funil">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border">
                 <th className="text-left py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
-                  Stage
+                  Etapa
                 </th>
                 <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
                   Volume
                 </th>
                 <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
-                  Share
+                  Participação
                 </th>
                 <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
-                  Prev. Step CVR
+                  CVR Etapa Ant.
                 </th>
               </tr>
             </thead>
             <tbody>
               {[
-                { stage: "Visitors", volume: "42,0M", share: "100%", cvr: "-" },
-                { stage: "Clicks", volume: "1,26M", share: "3,0%", cvr: "3,0%" },
+                { stage: "Visitantes", volume: "42,0M", share: "100%", cvr: "-" },
+                { stage: "Cliques", volume: "1,26M", share: "3,0%", cvr: "3,0%" },
                 { stage: "Leads", volume: "185K", share: "0,44%", cvr: "14,7%" },
-                { stage: "Qualified", volume: "24,8K", share: "0,06%", cvr: "13,4%" },
-                { stage: "Customers", volume: "1.740", share: "0,004%", cvr: "7,0%" },
+                { stage: "Qualificados", volume: "24,8K", share: "0,06%", cvr: "13,4%" },
+                { stage: "Clientes", volume: "1.740", share: "0,004%", cvr: "7,0%" },
               ].map((row, index) => (
                 <tr
                   key={row.stage}

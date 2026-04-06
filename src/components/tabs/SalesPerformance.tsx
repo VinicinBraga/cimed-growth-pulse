@@ -104,19 +104,19 @@ export function SalesPerformance() {
 
   return (
     <div className="space-y-6">
-       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <KPICard label="Net Revenue" value="R$ 56.2M" change={4.5} icon={DollarSign} />
-        <KPICard label="Gross Revenue" value="R$ 62.8M" change={4.1} icon={DollarSign} />
-        <KPICard label="Units Sold" value="59.4K" change={4.4} icon={Package} />
-        <KPICard label="Orders" value="8,420" change={3.8} icon={ShoppingCart} />
-        <KPICard label="Avg Ticket" value="R$ 745" change={1.2} icon={CreditCard} />
-        <KPICard label="Discount" value="R$ 4.2M" change={-2.1} icon={Percent} />
-        <KPICard label="Returns" value="R$ 2.4M" change={-5.2} icon={RotateCcw} />
-        <KPICard label="Rev/Unit" value="R$ 946" change={0.8} icon={BarChart3} />
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <KPICard label="Receita Líquida" value="R$ 56.2M" change={4.5} icon={DollarSign} />
+        <KPICard label="Receita Bruta" value="R$ 62.8M" change={4.1} icon={DollarSign} />
+        <KPICard label="Unidades Vendidas" value="59.4K" change={4.4} icon={Package} />
+        <KPICard label="Pedidos" value="8,420" change={3.8} icon={ShoppingCart} />
+        <KPICard label="Ticket Médio" value="R$ 745" change={1.2} icon={CreditCard} />
+        <KPICard label="Descontos" value="R$ 4.2M" change={-2.1} icon={Percent} />
+        <KPICard label="Devoluções" value="R$ 2.4M" change={-5.2} icon={RotateCcw} />
+        <KPICard label="Receita/Unidade" value="R$ 946" change={0.8} icon={BarChart3} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <ChartCard title="Revenue Trend (R$ M)">
+        <ChartCard title="Tendência de Receita (R$ M)">
           <ResponsiveContainer width="100%" height={280}>
             <AreaChart data={monthlyTrend}>
               <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
@@ -133,7 +133,7 @@ export function SalesPerformance() {
                 tickFormatter={(v) => formatCompactNumber(Number(v))}
               />
               <Tooltip
-                formatter={(value: number) => [formatCurrencyCompact(Number(value)), "Revenue"]}
+                formatter={(value: number) => [formatCurrencyCompact(Number(value)), "Receita"]}
                 contentStyle={{
                   borderRadius: 12,
                   border: "1px solid #E5E7EB",
@@ -147,13 +147,13 @@ export function SalesPerformance() {
                 fill={COLORS.primary}
                 fillOpacity={0.18}
                 strokeWidth={2.5}
-                name="Revenue"
+                name="Receita"
               />
             </AreaChart>
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="Units Sold Trend">
+        <ChartCard title="Tendência de Unidades Vendidas">
           <ResponsiveContainer width="100%" height={280}>
             <AreaChart data={monthlyTrend}>
               <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
@@ -170,7 +170,7 @@ export function SalesPerformance() {
                 tickFormatter={(v) => formatCompactNumber(Number(v))}
               />
               <Tooltip
-                formatter={(value: number) => [formatCompactNumber(Number(value)), "Units"]}
+                formatter={(value: number) => [formatCompactNumber(Number(value)), "Unidades"]}
                 contentStyle={{
                   borderRadius: 12,
                   border: "1px solid #E5E7EB",
@@ -184,7 +184,7 @@ export function SalesPerformance() {
                 fill={COLORS.black}
                 fillOpacity={0.06}
                 strokeWidth={2.5}
-                name="Units"
+                name="Unidades"
               />
             </AreaChart>
           </ResponsiveContainer>
@@ -192,7 +192,7 @@ export function SalesPerformance() {
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <ChartCard title="Revenue by Channel (R$ M)">
+        <ChartCard title="Receita por Canal (R$ M)">
           <ResponsiveContainer width="100%" height={240}>
             <BarChart data={styledChannelRevenue} layout="vertical">
               <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
@@ -211,7 +211,7 @@ export function SalesPerformance() {
                 width={88}
               />
               <Tooltip
-                formatter={(value: number) => [formatCurrencyCompact(Number(value) * 1000000), "Revenue"]}
+                formatter={(value: number) => [formatCurrencyCompact(Number(value) * 1000000), "Receita"]}
                 contentStyle={{
                   borderRadius: 12,
                   border: "1px solid #E5E7EB",
@@ -227,7 +227,7 @@ export function SalesPerformance() {
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="Revenue by Category (R$ M)">
+        <ChartCard title="Receita por Categoria (R$ M)">
           <ResponsiveContainer width="100%" height={240}>
             <BarChart data={styledCategoryRevenue}>
               <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
@@ -243,14 +243,14 @@ export function SalesPerformance() {
                 tickLine={false}
               />
               <Tooltip
-                formatter={(value: number) => [formatCurrencyCompact(Number(value) * 1000000), "Revenue"]}
+                formatter={(value: number) => [formatCurrencyCompact(Number(value) * 1000000), "Receita"]}
                 contentStyle={{
                   borderRadius: 12,
                   border: "1px solid #E5E7EB",
                   boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
                 }}
               />
-              <Bar dataKey="revenue" radius={[8, 8, 0, 0]} name="Revenue">
+              <Bar dataKey="revenue" radius={[8, 8, 0, 0]} name="Receita">
                 {styledCategoryRevenue.map((entry, i) => (
                   <Cell key={i} fill={entry.color} />
                 ))}
@@ -259,7 +259,7 @@ export function SalesPerformance() {
           </ResponsiveContainer>
         </ChartCard>
 
-        <ChartCard title="Revenue by Brand (R$ M)">
+        <ChartCard title="Receita por Marca (R$ M)">
           <ResponsiveContainer width="100%" height={240}>
             <BarChart data={styledBrandRevenue} layout="vertical">
               <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
@@ -278,14 +278,14 @@ export function SalesPerformance() {
                 width={88}
               />
               <Tooltip
-                formatter={(value: number) => [formatCurrencyCompact(Number(value) * 1000000), "Revenue"]}
+                formatter={(value: number) => [formatCurrencyCompact(Number(value) * 1000000), "Receita"]}
                 contentStyle={{
                   borderRadius: 12,
                   border: "1px solid #E5E7EB",
                   boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
                 }}
               />
-              <Bar dataKey="revenue" radius={[0, 8, 8, 0]} name="Revenue">
+              <Bar dataKey="revenue" radius={[0, 8, 8, 0]} name="Receita">
                 {styledBrandRevenue.map((entry, i) => (
                   <Cell key={i} fill={entry.color} />
                 ))}
@@ -295,22 +295,22 @@ export function SalesPerformance() {
         </ChartCard>
       </div>
 
-      <ChartCard title="Top Products">
+      <ChartCard title="Produtos Mais Vendidos">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border">
                 <th className="text-left py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
-                  Product
+                  Produto
                 </th>
                 <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
-                  Revenue
+                  Receita
                 </th>
                 <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
-                  Units
+                  Unidades
                 </th>
                 <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
-                  Growth
+                  Crescimento
                 </th>
               </tr>
             </thead>

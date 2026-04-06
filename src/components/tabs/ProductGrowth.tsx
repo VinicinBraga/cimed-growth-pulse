@@ -3,26 +3,27 @@ import { ChartCard } from "../dashboard/ChartCard";
 import {
   Package,
   TrendingUp,
-  ShoppingCart,
-  DollarSign,
   BarChart3,
-  Boxes,
-  Star,
-  Percent,
+  ShoppingBag,
+  Target,
+  Award,
+  Activity,
+  DollarSign,
 } from "lucide-react";
+import { monthlyTrend, topProducts, categoryRevenue, brandRevenue } from "@/data/mockData";
 import {
   ResponsiveContainer,
+  LineChart,
+  Line,
   BarChart,
   Bar,
-  Cell,
+  AreaChart,
+  Area,
   XAxis,
   YAxis,
   CartesianGrid,
   Tooltip,
-  AreaChart,
-  Area,
-  LineChart,
-  Line,
+  Cell,
 } from "recharts";
 
 const COLORS = {
@@ -35,102 +36,79 @@ const COLORS = {
   grid: "#E5E7EB",
 };
 
-const PRODUCT_COLORS = [
-  "#F6C338",
-  "#111111",
-  "#6B7280",
-  "#9CA3AF",
-  "#4B5563",
-  "#D1D5DB",
-];
-
-const productCategories = [
-  { category: "Higiene", revenue: 18.4, growth: 8.2, units: 18200 },
-  { category: "Beleza", revenue: 14.9, growth: 6.1, units: 14900 },
-  { category: "Suplementos", revenue: 11.8, growth: 9.4, units: 12100 },
-  { category: "Infantil", revenue: 6.7, growth: 4.2, units: 7600 },
-  { category: "Dermocosméticos", revenue: 4.6, growth: 7.8, units: 3900 },
-];
-
-const skuPerformance = [
-  { sku: "SKU A", revenue: 8.2, growth: 9.1 },
-  { sku: "SKU B", revenue: 7.4, growth: 6.8 },
-  { sku: "SKU C", revenue: 6.6, growth: 5.2 },
-  { sku: "SKU D", revenue: 5.9, growth: 7.6 },
-  { sku: "SKU E", revenue: 4.8, growth: 4.3 },
-];
-
-const monthlyProductTrend = [
-  { month: "Jan", launches: 4, revenue: 6.4, margin: 24.1 },
-  { month: "Feb", launches: 3, revenue: 7.1, margin: 24.8 },
-  { month: "Mar", launches: 5, revenue: 7.8, margin: 25.4 },
-  { month: "Apr", launches: 4, revenue: 8.2, margin: 25.1 },
-  { month: "May", launches: 6, revenue: 9.4, margin: 26.0 },
-  { month: "Jun", launches: 5, revenue: 10.1, margin: 26.5 },
-];
+const CHART_COLORS = ["#F6C338", "#111111", "#6B7280", "#9CA3AF", "#D1D5DB", "#4B5563"];
 
 function formatCompactNumber(value: number) {
-  if (value >= 1000000) return `${(value / 1000000).toFixed(1).replace(".", ",")}M`;
-  if (value >= 1000) return `${(value / 1000).toFixed(1).replace(".", ",")}K`;
-  return `${value}`;
+  const num = Number(value || 0);
+
+  if (num >= 1000000) {
+    return `${(num / 1000000).toFixed(1).replace(".", ",")}M`;
+  }
+
+  if (num >= 1000) {
+    return `${(num / 1000).toFixed(1).replace(".", ",")}K`;
+  }
+
+  return `${num}`;
 }
 
 function formatCurrencyCompact(value: number) {
-  if (value >= 1000000) return `R$ ${(value / 1000000).toFixed(1).replace(".", ",")}M`;
-  if (value >= 1000) return `R$ ${(value / 1000).toFixed(1).replace(".", ",")}K`;
-  return `R$ ${value.toFixed(0).replace(".", ",")}`;
+  const num = Number(value || 0);
+
+  if (num >= 1000000) {
+    return `R$ ${(num / 1000000).toFixed(1).replace(".", ",")}M`;
+  }
+
+  if (num >= 1000) {
+    return `R$ ${(num / 1000).toFixed(1).replace(".", ",")}K`;
+  }
+
+  return `R$ ${num.toFixed(0).replace(".", ",")}`;
 }
 
 export function ProductGrowth() {
+  const productTrend = monthlyTrend.map((item, index) => ({
+    month: item.month,
+    launches: 2 + (index % 3),
+    revenuePerProduct: 180000 + index * 8500,
+    sellThrough: 68 + index * 0.9,
+  }));
+
+  const productMix = categoryRevenue.map((item, index) => ({
+    ...item,
+    color: CHART_COLORS[index % CHART_COLORS.length],
+  }));
+
+  const brandMix = brandRevenue.map((item, index) => ({
+    ...item,
+    color: CHART_COLORS[index % CHART_COLORS.length],
+  }));
+
+  const innovationPipeline = [
+    { stage: "Ideação", value: 28 },
+    { stage: "Pesquisa", value: 19 },
+    { stage: "Desenvolvimento", value: 12 },
+    { stage: "Teste", value: 7 },
+    { stage: "Lançamento", value: 3 },
+  ];
+
   return (
     <div className="space-y-6">
-       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <KPICard label="Active SKUs" value="1.284" change={3.2} icon={Package} />
-        <KPICard label="Product Revenue" value="R$ 56.4M" change={6.1} icon={DollarSign} />
-        <KPICard label="Units Sold" value="56.7K" change={4.8} icon={ShoppingCart} />
-        <KPICard label="Avg Margin" value="25.3%" change={0.7} icon={Percent} />
-        <KPICard label="Launches" value="27" change={8.4} icon={Star} />
-        <KPICard label="Top Category" value="Higiene" change={0.0} icon={Boxes} />
-        <KPICard label="Growth Rate" value="6.9%" change={0.9} icon={TrendingUp} />
-        <KPICard label="Rev / SKU" value="R$ 43,9K" change={1.3} icon={BarChart3} />
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <KPICard label="SKUs Ativos" value="248" change={3.2} icon={Package} />
+        <KPICard label="Receita por SKU" value="R$ 226K" change={2.4} icon={DollarSign} />
+        <KPICard label="Sell-through" value="77,4%" change={1.8} icon={TrendingUp} />
+        <KPICard label="Novos Lançamentos" value="18" change={12.5} icon={Award} />
+        <KPICard label="Mix de Produtos" value="12 categorias" change={0.0} icon={ShoppingBag} />
+        <KPICard label="Top SKU Share" value="34,2%" change={-1.1} icon={Target} />
+        <KPICard label="Performance Média" value="8,6/10" change={0.4} icon={BarChart3} />
+        <KPICard label="Pipeline de Inovação" value="69" change={5.7} icon={Activity} />
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
-        <ChartCard title="Revenue by Category (R$ M)">
-          <ResponsiveContainer width="100%" height={300}>
-            <BarChart data={productCategories}>
-              <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
-              <XAxis
-                dataKey="category"
-                tick={{ fontSize: 11, fill: COLORS.gray }}
-                axisLine={false}
-                tickLine={false}
-              />
-              <YAxis
-                tick={{ fontSize: 11, fill: COLORS.gray }}
-                axisLine={false}
-                tickLine={false}
-              />
-              <Tooltip
-                formatter={(value: number) => [`R$ ${value.toFixed(1).replace(".", ",")}M`, "Revenue"]}
-                contentStyle={{
-                  borderRadius: 12,
-                  border: "1px solid #E5E7EB",
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-                }}
-              />
-              <Bar dataKey="revenue" radius={[8, 8, 0, 0]}>
-                {productCategories.map((entry, index) => (
-                  <Cell key={entry.category} fill={PRODUCT_COLORS[index % PRODUCT_COLORS.length]} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-
-        <ChartCard title="Product Revenue Trend (R$ M)">
-          <ResponsiveContainer width="100%" height={300}>
-            <AreaChart data={monthlyProductTrend}>
+        <ChartCard title="Receita Média por Produto">
+          <ResponsiveContainer width="100%" height={280}>
+            <AreaChart data={productTrend}>
               <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
               <XAxis
                 dataKey="month"
@@ -142,9 +120,10 @@ export function ProductGrowth() {
                 tick={{ fontSize: 11, fill: COLORS.gray }}
                 axisLine={false}
                 tickLine={false}
+                tickFormatter={(v) => formatCurrencyCompact(Number(v))}
               />
               <Tooltip
-                formatter={(value: number) => [`R$ ${value.toFixed(1).replace(".", ",")}M`, "Revenue"]}
+                formatter={(value: number) => [formatCurrencyCompact(Number(value)), "Receita por Produto"]}
                 contentStyle={{
                   borderRadius: 12,
                   border: "1px solid #E5E7EB",
@@ -153,88 +132,20 @@ export function ProductGrowth() {
               />
               <Area
                 type="monotone"
-                dataKey="revenue"
+                dataKey="revenuePerProduct"
                 stroke={COLORS.primary}
                 fill={COLORS.primary}
                 fillOpacity={0.18}
                 strokeWidth={2.5}
+                name="Receita por Produto"
               />
             </AreaChart>
           </ResponsiveContainer>
         </ChartCard>
-      </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-        <ChartCard title="Top SKU Revenue (R$ M)">
-          <ResponsiveContainer width="100%" height={240}>
-            <BarChart data={skuPerformance} layout="vertical">
-              <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
-              <XAxis
-                type="number"
-                tick={{ fontSize: 11, fill: COLORS.gray }}
-                axisLine={false}
-                tickLine={false}
-              />
-              <YAxis
-                dataKey="sku"
-                type="category"
-                tick={{ fontSize: 11, fill: COLORS.gray }}
-                axisLine={false}
-                tickLine={false}
-                width={60}
-              />
-              <Tooltip
-                formatter={(value: number) => [`R$ ${value.toFixed(1).replace(".", ",")}M`, "Revenue"]}
-                contentStyle={{
-                  borderRadius: 12,
-                  border: "1px solid #E5E7EB",
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-                }}
-              />
-              <Bar dataKey="revenue" radius={[0, 8, 8, 0]}>
-                {skuPerformance.map((entry, index) => (
-                  <Cell key={entry.sku} fill={PRODUCT_COLORS[index % PRODUCT_COLORS.length]} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-
-        <ChartCard title="Growth by Category (%)">
-          <ResponsiveContainer width="100%" height={240}>
-            <BarChart data={productCategories}>
-              <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
-              <XAxis
-                dataKey="category"
-                tick={{ fontSize: 10, fill: COLORS.gray }}
-                axisLine={false}
-                tickLine={false}
-              />
-              <YAxis
-                tick={{ fontSize: 11, fill: COLORS.gray }}
-                axisLine={false}
-                tickLine={false}
-              />
-              <Tooltip
-                formatter={(value: number) => [`${value.toFixed(1).replace(".", ",")}%`, "Growth"]}
-                contentStyle={{
-                  borderRadius: 12,
-                  border: "1px solid #E5E7EB",
-                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
-                }}
-              />
-              <Bar dataKey="growth" radius={[8, 8, 0, 0]}>
-                {productCategories.map((entry, index) => (
-                  <Cell key={entry.category} fill={PRODUCT_COLORS[index % PRODUCT_COLORS.length]} />
-                ))}
-              </Bar>
-            </BarChart>
-          </ResponsiveContainer>
-        </ChartCard>
-
-        <ChartCard title="Margin Trend (%)">
-          <ResponsiveContainer width="100%" height={240}>
-            <LineChart data={monthlyProductTrend}>
+        <ChartCard title="Evolução do Sell-through (%)">
+          <ResponsiveContainer width="100%" height={280}>
+            <LineChart data={productTrend}>
               <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
               <XAxis
                 dataKey="month"
@@ -248,7 +159,7 @@ export function ProductGrowth() {
                 tickLine={false}
               />
               <Tooltip
-                formatter={(value: number) => [`${value.toFixed(1).replace(".", ",")}%`, "Margin"]}
+                formatter={(value: number) => [`${Number(value).toFixed(1).replace(".", ",")}%`, "Sell-through"]}
                 contentStyle={{
                   borderRadius: 12,
                   border: "1px solid #E5E7EB",
@@ -257,59 +168,165 @@ export function ProductGrowth() {
               />
               <Line
                 type="monotone"
-                dataKey="margin"
+                dataKey="sellThrough"
                 stroke={COLORS.black}
                 strokeWidth={2.5}
                 dot={{ fill: COLORS.black, r: 3.5 }}
                 activeDot={{ r: 5 }}
+                name="Sell-through"
               />
             </LineChart>
           </ResponsiveContainer>
         </ChartCard>
       </div>
 
-      <ChartCard title="Category Summary">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+        <ChartCard title="Receita por Categoria">
+          <ResponsiveContainer width="100%" height={240}>
+            <BarChart data={productMix}>
+              <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
+              <XAxis
+                dataKey="category"
+                tick={{ fontSize: 9, fill: COLORS.gray }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis
+                tick={{ fontSize: 11, fill: COLORS.gray }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <Tooltip
+                formatter={(value: number) => [formatCurrencyCompact(Number(value) * 1000000), "Receita"]}
+                contentStyle={{
+                  borderRadius: 12,
+                  border: "1px solid #E5E7EB",
+                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+                }}
+              />
+              <Bar dataKey="revenue" radius={[8, 8, 0, 0]} name="Receita">
+                {productMix.map((entry, index) => (
+                  <Cell key={entry.category} fill={entry.color} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </ChartCard>
+
+        <ChartCard title="Receita por Marca">
+          <ResponsiveContainer width="100%" height={240}>
+            <BarChart data={brandMix} layout="vertical">
+              <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
+              <XAxis
+                type="number"
+                tick={{ fontSize: 11, fill: COLORS.gray }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis
+                dataKey="brand"
+                type="category"
+                width={80}
+                tick={{ fontSize: 10, fill: COLORS.gray }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <Tooltip
+                formatter={(value: number) => [formatCurrencyCompact(Number(value) * 1000000), "Receita"]}
+                contentStyle={{
+                  borderRadius: 12,
+                  border: "1px solid #E5E7EB",
+                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+                }}
+              />
+              <Bar dataKey="revenue" radius={[0, 8, 8, 0]} name="Receita">
+                {brandMix.map((entry) => (
+                  <Cell key={entry.brand} fill={entry.color} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </ChartCard>
+
+        <ChartCard title="Pipeline de Inovação">
+          <ResponsiveContainer width="100%" height={240}>
+            <BarChart data={innovationPipeline} layout="vertical">
+              <CartesianGrid strokeDasharray="3 3" stroke={COLORS.grid} />
+              <XAxis
+                type="number"
+                tick={{ fontSize: 11, fill: COLORS.gray }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <YAxis
+                dataKey="stage"
+                type="category"
+                width={100}
+                tick={{ fontSize: 10, fill: COLORS.gray }}
+                axisLine={false}
+                tickLine={false}
+              />
+              <Tooltip
+                formatter={(value: number) => [formatCompactNumber(Number(value)), "Quantidade"]}
+                contentStyle={{
+                  borderRadius: 12,
+                  border: "1px solid #E5E7EB",
+                  boxShadow: "0 8px 24px rgba(0,0,0,0.08)",
+                }}
+              />
+              <Bar dataKey="value" radius={[0, 8, 8, 0]} name="Quantidade">
+                {innovationPipeline.map((entry, index) => (
+                  <Cell key={entry.stage} fill={CHART_COLORS[index % CHART_COLORS.length]} />
+                ))}
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </ChartCard>
+      </div>
+
+      <ChartCard title="Ranking de Produtos">
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-border">
                 <th className="text-left py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
-                  Category
+                  Produto
                 </th>
                 <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
-                  Revenue
+                  Receita
                 </th>
                 <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
-                  Units
+                  Unidades
                 </th>
                 <th className="text-right py-3 px-4 font-semibold text-muted-foreground text-xs uppercase tracking-wide">
-                  Growth
+                  Crescimento
                 </th>
               </tr>
             </thead>
             <tbody>
-              {productCategories.map((row, index) => (
+              {topProducts.map((product, index) => (
                 <tr
-                  key={row.category}
+                  key={product.name}
                   className="border-b border-border/50 hover:bg-muted/30 transition-colors"
                 >
                   <td className="py-3 px-4 font-medium text-foreground">
                     <div className="flex items-center gap-3">
                       <span
                         className="h-2.5 w-2.5 rounded-full"
-                        style={{ backgroundColor: PRODUCT_COLORS[index % PRODUCT_COLORS.length] }}
+                        style={{ backgroundColor: CHART_COLORS[index % CHART_COLORS.length] }}
                       />
-                      {row.category}
+                      {product.name}
                     </div>
                   </td>
                   <td className="py-3 px-4 text-right text-foreground font-medium">
-                    R$ {row.revenue.toFixed(1).replace(".", ",")}M
+                    R$ {product.revenue}M
                   </td>
                   <td className="py-3 px-4 text-right text-muted-foreground">
-                    {formatCompactNumber(row.units)}
+                    {product.units.toLocaleString()}
                   </td>
                   <td className="py-3 px-4 text-right text-muted-foreground">
-                    {row.growth.toFixed(1).replace(".", ",")}%
+                    {product.growth > 0 ? "+" : ""}
+                    {product.growth}%
                   </td>
                 </tr>
               ))}
